@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import useAuth from "@/composables/useAuth";
+import router from "@/router";
 import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 
@@ -60,7 +61,7 @@ export default defineComponent({
     };
 
     const signUp = () => {
-      console.log("test");
+      router.push("Signup");
     };
     return { username, password, handleSubmit, errorLogin, signUp };
   },

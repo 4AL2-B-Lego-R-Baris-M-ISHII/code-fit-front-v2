@@ -1,4 +1,4 @@
-<template></template>
+<template>Sign up</template>
 
 <script lang="ts">
 export default {};
