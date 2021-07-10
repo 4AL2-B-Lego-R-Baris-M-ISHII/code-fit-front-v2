@@ -26,7 +26,7 @@ export default function useAuth() {
     } catch (err) {
       if (err.status !== undefined) {
         if (err.status === 401) {
-          throw Error("You have to sign up to sign in");
+          throw Error("You are not sign up");
         }
         throw Error("Problem server, try later");
       }

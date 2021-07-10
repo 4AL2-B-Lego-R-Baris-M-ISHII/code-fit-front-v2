@@ -1,4 +1,14 @@
+html,
+body {
+  margin: 0;
+}
+
 h1 {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, sans-serif;
   letter-spacing: 4px;
+}
+
+.container {
+  padding: 0 10em;
+  margin: 0;
 }
