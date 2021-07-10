@@ -24,7 +24,7 @@
           </div>
           <div class="form-group">
             <div class="space"></div>
-            <button class="sign-up-btn" @click="signUp" type="button">
+            <button class="sign-up-btn" @click="goSignUpPage" type="button">
               Sign up ?
             </button>
             <button>Submit</button>
@@ -60,10 +60,10 @@ export default defineComponent({
       }
     };
 
-    const signUp = () => {
-      router.push("Signup");
+    const goSignUpPage = () => {
+      router.push("signup");
     };
-    return { username, password, handleSubmit, errorLogin, signUp };
+    return { username, password, handleSubmit, errorLogin, goSignUpPage };
   },
 });
 </script>
@@ -103,44 +103,15 @@ export default defineComponent({
       flex-direction: column;
       text-align: center;
 
-      .form-group {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        padding: 1em 2em;
-        label {
-          font-size: 1.7em;
-        }
-        input {
-          width: 70%;
-          font-size: 1em;
-        }
-
-        .space {
-          width: 75%;
-        }
-        .sign-up-btn {
-          border: none;
-          color: #42b883;
-          margin-right: 1em;
-        }
-        .sign-up-btn:hover {
-          border: none;
-          color: #35495e;
-          background: #eee;
-        }
-        button {
-          font-size: inherit;
-          min-width: 100px;
-          min-height: 50px;
-          background: inherit;
-          font-family: inherit;
-          cursor: pointer;
-        }
-        button:hover {
-          background: #ddd;
-          font-weight: bold;
-        }
+      .sign-up-btn {
+        border: none;
+        color: #42b883;
+        margin-right: 1em;
+      }
+      .sign-up-btn:hover {
+        border: none;
+        color: #35495e;
+        background: #eee;
       }
 
       .error-content {

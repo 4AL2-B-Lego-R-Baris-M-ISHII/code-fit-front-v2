@@ -3,11 +3,36 @@ import { ref } from "vue";
 import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import LoginResponse from "@/types/auth/LoginResponse";
 import LoginRequest from "@/types/auth/LoginRequest";
+import SignupRequest from "@/types/auth/SignupRequest";
 
 const token = ref("");
 
 export default function useAuth() {
   const JWT_TOKEN_ID = "JWT_TOKEN_ID";
+
+  async function signup(
+    username: string,
+    password: string,
+    email: string
+  ): Promise<void> {
+    const body = {
+      username,
+      password,
+      email,
+    } as SignupRequest;
+    try {
+      await urlHelpers.sendNoContent(RequestMethod.POST, "/auth/signup", body);
+      router.push("/login");
+    } catch (err) {
+      if (err.status !== undefined) {
+        if (err.status === 401) {
+          throw Error("You are not sign up");
+        }
+        throw Error("Problem server, try later");
+      }
+      throw Error(err.message);
+    }
+  }
 
   async function login(username: string, password: string): Promise<void> {
     const body = {
@@ -56,6 +81,7 @@ export default function useAuth() {
 
   return {
     token,
+    signup,
     login,
     logout,
     isLogin,

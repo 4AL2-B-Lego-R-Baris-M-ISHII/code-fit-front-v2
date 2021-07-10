@@ -10,7 +10,7 @@ export enum RequestMethod {
 class UrlHelpers {
   url: string = process.env.VUE_APP_ROOT_URL;
 
-  async get(path: string) {
+  async get(path: string): Promise<Response> {
     const requestInfo = {
       method: RequestMethod.GET,
       headers: {
@@ -30,17 +30,38 @@ class UrlHelpers {
         Accept: "*/*",
         "Content-Type": "application/json",
       },
-    } as any;
+    } as RequestInit;
     if (body !== undefined) {
       requestInfo["body"] = JSON.stringify(body);
     }
-
     const response = await fetch(this.url + path, requestInfo);
     const result = await response.json();
     if (!response.ok) {
       throw result as ErrorResponse;
     }
     return result as Res;
+  }
+
+  async sendNoContent<Req>(
+    method: RequestMethod,
+    path: string,
+    body: Req
+  ): Promise<void> {
+    const requestInfo = {
+      method,
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    } as RequestInit;
+    if (body !== undefined) {
+      requestInfo["body"] = JSON.stringify(body);
+    }
+    const response = await fetch(this.url + path, requestInfo);
+    if (!response.ok) {
+      const result = await response.json();
+      throw result as ErrorResponse;
+    }
   }
 }
 
