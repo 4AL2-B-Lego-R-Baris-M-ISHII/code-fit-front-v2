@@ -34,7 +34,7 @@ export default defineComponent({
     const handleSubmit = async () => {
       try {
         await login(username.value, password.value);
-      } catch (err: any) {
+      } catch (err) {
         errorLogin.value = err.message;
       }
     };

@@ -1,4 +1,5 @@
 <template>
+  <Nav />
   <div v-if="token">
     <h3>nav</h3>
     <button @click="logout">logout</button>
@@ -10,8 +11,10 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import useAuth from "./composables/useAuth";
+import Nav from "@/components/Nav.vue";
 
 export default defineComponent({
+  components: {Nav},
   setup() {
     const { logout, isLogin, token } = useAuth();
     isLogin();
