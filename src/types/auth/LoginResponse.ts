@@ -1,4 +1,4 @@
-interface SigninResponse {
+interface LoginResponse {
   id: number;
   token: string;
   type: string;
@@ -7,4 +7,4 @@ interface SigninResponse {
   roles: string[];
 }
 
-export default SigninResponse;
+export default LoginResponse;

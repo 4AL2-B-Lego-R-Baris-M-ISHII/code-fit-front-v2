@@ -1,44 +1,36 @@
 import router from "@/router";
-import SigninResponse from "@/types/auth/LoginResponse";
-import ErrorResponse from "@/types/ErrorResponse";
 import { ref } from "vue";
+import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
+import LoginResponse from "@/types/auth/LoginResponse";
+import LoginRequest from "@/types/auth/LoginRequest";
 
 const token = ref("");
 
 export default function useAuth() {
-  const err = ref<null | string>(null);
   const JWT_TOKEN_ID = "JWT_TOKEN_ID";
 
   async function login(username: string, password: string): Promise<void> {
+    const body = {
+      username,
+      password,
+    } as LoginRequest;
     try {
-      const body = JSON.stringify({
-        username,
-        password,
-      });
-      const url = process.env.VUE_APP_ROOT_URL + "/auth/signin";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-        body,
-      });
-
-      if (!response.ok) {
-        const result: ErrorResponse = await response.json();
-        if (result.status === 401) {
+      const response: LoginResponse = await urlHelpers.send(
+        RequestMethod.POST,
+        "/auth/signin",
+        body
+      );
+      localStorage.setItem(JWT_TOKEN_ID, response.token);
+      token.value = response.token;
+      router.push("/");
+    } catch (err) {
+      if (err.status !== undefined) {
+        if (err.status === 401) {
           throw Error("You have to sign up to sign in");
         }
-        throw Error("Problem server, try again later");
+        throw Error("Problem server, try later");
       }
-      const result: SigninResponse = await response.json();
-
-      localStorage.setItem(JWT_TOKEN_ID, result.token);
-      token.value = result.token;
-      router.push("Home");
-    } catch (e) {
-      throw Error(e.message);
+      throw Error(err.message);
     }
   }
 
@@ -66,7 +58,6 @@ export default function useAuth() {
     token,
     login,
     logout,
-    err,
     isLogin,
   };
 }
