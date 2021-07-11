@@ -8,13 +8,14 @@ createApp(App)
   .use(router)
   .mount("#app");
 
+const publicPath = ["Login", "Signup", "NotFound"];
 router.beforeEach((to, from, next) => {
-  if (
-    to.name !== "Login" &&
-    to.name !== "Signup" &&
-    jwtTokenUtils.getToken() === null
-  )
-    next({ name: "Login" });
-  // if the user is not authenticated, `next` is called twice
-  else next();
+  if (to.name !== undefined && to.name !== null && router.hasRoute(to.name)) {
+    if (
+      !publicPath.includes(to.name.toString()) &&
+      jwtTokenUtils.getToken() === null
+    )
+      next({ name: "Login" });
+    else next();
+  }
 });
