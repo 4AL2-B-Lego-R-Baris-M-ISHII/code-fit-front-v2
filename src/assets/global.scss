@@ -1,0 +1,44 @@
+html,
+body {
+  margin: 0;
+}
+
+h1 {
+  font-family: Inter, sans-serif;
+  letter-spacing: 4px;
+}
+
+.container {
+  padding: 0 10em;
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 1em 2em;
+  label {
+    font-size: 1.7em;
+  }
+  input {
+    width: 70%;
+    font-size: 1em;
+  }
+
+  .space {
+    width: 75%;
+  }
+  button {
+    font-size: inherit;
+    min-width: 100px;
+    min-height: 50px;
+    background: inherit;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #ddd;
+    font-weight: bold;
+  }
+}
