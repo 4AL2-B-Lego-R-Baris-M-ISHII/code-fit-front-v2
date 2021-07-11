@@ -3,26 +3,11 @@
     <h2>404</h2>
     <h3>Page not found</h3>
     <div>
-      <button @click="returnMainPath">Return to main page</button>
+      <router-link :to="{ name: 'Home' }">Return to home page</router-link>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import router from "@/router";
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {
-    const returnMainPath = () => {
-      router.push("/");
-    };
-    return {
-      returnMainPath,
-    };
-  },
-});
-</script>
 
 <style lang="scss" scoped>
 .not-found {

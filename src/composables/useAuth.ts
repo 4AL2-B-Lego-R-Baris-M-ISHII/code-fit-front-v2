@@ -9,6 +9,7 @@ import jwtTokenUtils from "@/utils/jwtTokenUtils";
 const token = ref("");
 
 export default function useAuth() {
+  const IS_ADMIN_ID = "isAdmin";
   async function signup(
     username: string,
     password: string,
@@ -44,6 +45,14 @@ export default function useAuth() {
         "/auth/signin",
         body
       );
+      console.log(response);
+      if (response.roles === undefined) {
+        throw Error("Problem server, try latter");
+      }
+      localStorage.setItem(
+        IS_ADMIN_ID,
+        `${response.roles[0] === "ROLE_ADMIN"}`
+      );
       jwtTokenUtils.setToken(response.token);
       token.value = response.token;
       router.push("/");
@@ -65,6 +74,7 @@ export default function useAuth() {
     } else {
       jwtTokenUtils.removeToken();
     }
+    localStorage.removeItem(IS_ADMIN_ID);
     token.value = "";
     router.push("Login");
   }
