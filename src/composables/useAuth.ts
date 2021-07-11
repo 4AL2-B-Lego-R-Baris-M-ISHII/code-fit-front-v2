@@ -4,12 +4,11 @@ import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import LoginResponse from "@/types/auth/LoginResponse";
 import LoginRequest from "@/types/auth/LoginRequest";
 import SignupRequest from "@/types/auth/SignupRequest";
+import jwtTokenUtils from "@/utils/jwtTokenUtils";
 
 const token = ref("");
 
 export default function useAuth() {
-  const JWT_TOKEN_ID = "JWT_TOKEN_ID";
-
   async function signup(
     username: string,
     password: string,
@@ -45,7 +44,7 @@ export default function useAuth() {
         "/auth/signin",
         body
       );
-      localStorage.setItem(JWT_TOKEN_ID, response.token);
+      jwtTokenUtils.setToken(response.token);
       token.value = response.token;
       router.push("/");
     } catch (err) {
@@ -60,18 +59,18 @@ export default function useAuth() {
   }
 
   async function logout() {
-    const jwtTokenId = localStorage.getItem(JWT_TOKEN_ID);
+    const jwtTokenId = jwtTokenUtils.getToken();
     if (jwtTokenId === null) {
       console.warn("Logout a none login user");
     } else {
-      localStorage.removeItem(JWT_TOKEN_ID);
+      jwtTokenUtils.removeToken();
     }
     token.value = "";
     router.push("Login");
   }
 
   async function isLogin() {
-    const jwtTokenId = localStorage.getItem(JWT_TOKEN_ID);
+    const jwtTokenId = jwtTokenUtils.getToken();
     if (jwtTokenId === null) {
       return;
     }

@@ -1,4 +1,5 @@
 import ErrorResponse from "@/types/ErrorResponse";
+import jwtTokenUtils from "@/utils/jwtTokenUtils";
 
 export enum RequestMethod {
   GET = "GET",
@@ -15,6 +16,7 @@ class UrlHelpers {
       method: RequestMethod.GET,
       headers: {
         Accept: "*/*",
+        Authorization: `Bearer ${jwtTokenUtils.getToken()}`,
       },
     };
     return await fetch(this.url + path, requestInfo);
@@ -29,6 +31,7 @@ class UrlHelpers {
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtTokenUtils.getToken()}`,
       },
     } as RequestInit;
     if (body !== undefined) {
@@ -52,6 +55,7 @@ class UrlHelpers {
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtTokenUtils.getToken()}`,
       },
     } as RequestInit;
     if (body !== undefined) {
