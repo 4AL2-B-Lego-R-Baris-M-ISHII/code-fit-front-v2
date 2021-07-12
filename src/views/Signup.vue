@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import useAuth from "@/composables/useAuth";
+import useLoading from "@/composables/useLoading";
 import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 export default defineComponent({
@@ -39,10 +40,14 @@ export default defineComponent({
     const errorSignup = ref(null);
 
     const handleSubmit = async () => {
+      const { isLoading } = useLoading();
       try {
+        isLoading.value = true;
         await signup(username.value, password.value, email.value);
       } catch (err) {
         errorSignup.value = err.message;
+      } finally {
+        isLoading.value = false;
       }
     };
 

@@ -1,15 +1,16 @@
 <template>
   <Nav />
-  <!-- <div id="nav"><router-link to="/">Home</router-link> |</div> -->
+  <Spinner />
   <router-view class="container" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import Nav from "@/components/Nav.vue";
+import Spinner from "@/components/Spinner.vue";
 
 export default defineComponent({
-  components: { Nav },
+  components: { Nav, Spinner },
 });
 </script>
 
