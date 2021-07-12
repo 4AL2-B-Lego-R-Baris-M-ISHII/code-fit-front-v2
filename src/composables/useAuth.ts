@@ -25,13 +25,19 @@ export default function useAuth() {
       await urlHelpers.sendNoContent(RequestMethod.POST, "/auth/signup", body);
       router.push("/login");
     } catch (err) {
-      if (err.status !== undefined) {
-        if (err.status === 401) {
-          throw Error("You are not sign up");
+      const status = err.status;
+      if (status !== undefined) {
+        switch (status) {
+          case 401:
+            throw Error("You are not sign up");
+          case 403:
+            throw Error("You are probably already sign up");
+          case undefined:
+            throw Error(err.message);
+          default:
+            throw Error("Problem server, try later");
         }
-        throw Error("Problem server, try later");
       }
-      throw Error(err.message);
     }
   }
 

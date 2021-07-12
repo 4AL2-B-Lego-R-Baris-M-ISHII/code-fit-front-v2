@@ -63,8 +63,10 @@ class UrlHelpers {
     }
     const response = await fetch(this.url + path, requestInfo);
     if (!response.ok) {
-      const result = await response.json();
-      throw result as ErrorResponse;
+      const result = {} as ErrorResponse;
+      result.status = response.status;
+      result.message = response.statusText;
+      throw result;
     }
   }
 }
