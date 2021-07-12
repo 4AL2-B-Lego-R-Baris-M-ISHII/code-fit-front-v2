@@ -1,7 +1,7 @@
 import router from "@/router";
 import { ref } from "vue";
 import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
-import LoginResponse from "@/types/auth/LoginResponse";
+import DtoUser from "@/types/auth/DtoUser";
 import LoginRequest from "@/types/auth/LoginRequest";
 import SignupRequest from "@/types/auth/SignupRequest";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
@@ -47,7 +47,7 @@ export default function useAuth() {
       password,
     } as LoginRequest;
     try {
-      const response: LoginResponse = await urlHelpers.send(
+      const response: DtoUser = await urlHelpers.send(
         RequestMethod.POST,
         "/auth/signin",
         body
