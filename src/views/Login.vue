@@ -87,7 +87,7 @@ export default defineComponent({
       margin-top: 0px;
     }
     .login-page-content {
-      font-size: 1.7em;
+      font-size: 1.5em;
       text-align: justify;
       display: flex;
       flex-direction: column;

@@ -5,10 +5,13 @@
         <img src="@/assets/img/dumbell.png" alt="dumbell logo" />
         <div class="nav__logo__title">Code fit</div>
       </div>
-      <router-link v-if="checkAdmin" :to="{ name: 'Admin' }"
-        >Administration</router-link
-      >
-      <button v-if="token" @click="logout">logout</button>
+      <div class="button-container" v-if="token">
+        <router-link v-if="checkAdmin" :to="{ name: 'Admin' }"
+          >Administration</router-link
+        >
+        |
+        <button @click="logout">Logout</button>
+      </div>
     </header>
     <hr />
   </div>
@@ -61,7 +64,7 @@ export default defineComponent({
     font-weight: bold;
     &__title {
       margin: 0.5em;
-      font-size: 2em;
+      font-size: 1.7em;
     }
   }
 
@@ -69,16 +72,23 @@ export default defineComponent({
     color: #666666;
     cursor: pointer;
   }
-  button {
+  .button-container {
+    margin-right: 1.5em;
+  }
+  button,
+  a {
+    color: black;
     font-size: 1em;
     font-weight: bolder;
     background: inherit;
-    padding: 1.5em;
-    margin-right: 1em;
+    padding: 1.2em;
+
     cursor: pointer;
     border: none;
+    text-decoration: none;
   }
-  button:hover {
+  button:hover,
+  a:hover {
     color: #666666;
     font-weight: bolder;
   }
