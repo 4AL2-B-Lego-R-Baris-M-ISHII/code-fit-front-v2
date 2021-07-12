@@ -7,9 +7,10 @@ import SignupRequest from "@/types/auth/SignupRequest";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
 
 const token = ref("");
+const roles = ref<string[]>([]);
 
 export default function useAuth() {
-  const IS_ADMIN_ID = "isAdmin";
+  const USER_ROLES = "userRoles";
   async function signup(
     username: string,
     password: string,
@@ -45,14 +46,11 @@ export default function useAuth() {
         "/auth/signin",
         body
       );
-      console.log(response);
       if (response.roles === undefined) {
         throw Error("Problem server, try latter");
       }
-      localStorage.setItem(
-        IS_ADMIN_ID,
-        `${response.roles[0] === "ROLE_ADMIN"}`
-      );
+      roles.value = response.roles;
+      localStorage.setItem(USER_ROLES, `${roles.value}`);
       jwtTokenUtils.setToken(response.token);
       token.value = response.token;
       router.push("/");
@@ -74,8 +72,9 @@ export default function useAuth() {
     } else {
       jwtTokenUtils.removeToken();
     }
-    localStorage.removeItem(IS_ADMIN_ID);
+    localStorage.removeItem(USER_ROLES);
     token.value = "";
+    roles.value = [];
     router.push("Login");
   }
 
@@ -88,8 +87,15 @@ export default function useAuth() {
     return true;
   }
 
+  async function isAdmin() {
+    const userRoles = localStorage.getItem(USER_ROLES);
+    return userRoles !== null && userRoles.includes("ROLE_ADMIN");
+  }
+
   return {
     token,
+    isAdmin,
+    roles,
     signup,
     login,
     logout,

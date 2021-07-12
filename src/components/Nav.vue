@@ -1,11 +1,13 @@
 <template>
   <div>
     <header class="nav">
-      <div class="nav__logo">
+      <div class="nav__logo" @click="redirectToHome">
         <img src="@/assets/img/dumbell.png" alt="dumbell logo" />
         <div class="nav__logo__title">Code fit</div>
       </div>
-
+      <router-link v-if="checkAdmin" :to="{ name: 'Admin' }"
+        >Administration</router-link
+      >
       <button v-if="token" @click="logout">logout</button>
     </header>
     <hr />
@@ -13,18 +15,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import useAuth from "@/composables/useAuth";
+import router from "@/router";
 
 export default defineComponent({
   name: "Nav",
   setup() {
-    const { logout, isLogin, token } = useAuth();
+    const { logout, isLogin, isAdmin, token, roles } = useAuth();
+    const checkAdmin = ref(false);
     isLogin();
+    isAdmin().then((isAdmin) => (checkAdmin.value = isAdmin));
+
+    watch(roles, async () => {
+      checkAdmin.value = await isAdmin();
+    });
+
+    const redirectToHome = () => {
+      router.push("/");
+    };
 
     return {
       logout,
+      checkAdmin,
       token,
+      redirectToHome,
     };
   },
 });
