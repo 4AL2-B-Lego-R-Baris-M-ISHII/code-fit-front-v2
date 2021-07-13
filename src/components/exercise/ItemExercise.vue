@@ -4,10 +4,10 @@
       <div class="exercise__header__title-and-actions">
         <h3>{{ exercise.title }}</h3>
         <button @click="editExercise(exercise)">
-          <font-awesome-icon :icon="faEdit" />update
+          <font-awesome-icon :icon="faEdit" />Update
         </button>
         <button @click="deleteExercise(exercise)">
-          <font-awesome-icon :icon="faTrash" />delete
+          <font-awesome-icon :icon="faTrash" />Delete
         </button>
       </div>
       <div class="creator">
