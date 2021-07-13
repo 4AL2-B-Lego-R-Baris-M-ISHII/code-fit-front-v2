@@ -1,10 +1,15 @@
 <template>
   <div class="exercise">
     <div class="exercise__header">
-      <div>
+      <div class="exercise__header__title-and-actions">
         <h3>{{ exercise.title }}</h3>
+        <button @click="editExercise(exercise)">
+          <font-awesome-icon :icon="faEdit" />update
+        </button>
+        <button @click="deleteExercise(exercise)">
+          <font-awesome-icon :icon="faTrash" />delete
+        </button>
       </div>
-
       <div class="creator">
         creator : <strong>{{ exercise.user.username }}</strong>
       </div>
@@ -31,8 +36,14 @@
 <script lang="ts">
 import DtoExercise from "@/types/exercise/dto-exercise";
 import { computed, defineComponent, PropType } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default defineComponent({
+  components: {
+    FontAwesomeIcon,
+  },
   props: {
     exercise: {
       required: true,
@@ -46,7 +57,6 @@ export default defineComponent({
       });
     });
 
-    // TODO : tooltip on language icons
     const mapLanguageName = new Map([
       ["C11", "c"],
       ["JAVA8", "java"],
@@ -55,7 +65,24 @@ export default defineComponent({
       return mapLanguageName.get(languageName);
     };
 
-    return { languageNames, languageTitle };
+    const editExercise = (exercise: DtoExercise) => {
+      // TODO update exercise redirect to page exercise
+      console.log(`update ${exercise.id}`);
+    };
+
+    const deleteExercise = (exercise: DtoExercise) => {
+      // TODO delete exercise open modal
+      console.log(`delete ${exercise.id}`);
+    };
+
+    return {
+      languageNames,
+      languageTitle,
+      faEdit,
+      faTrash,
+      editExercise,
+      deleteExercise,
+    };
   },
 });
 </script>
@@ -67,9 +94,31 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: space-between;
+    &__title-and-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button {
+        margin-left: 0.75em;
+        padding: 0.5em;
+        :first-child {
+          margin: 0 0.5em;
+        }
+        background: inherit;
+        border: none;
+        cursor: pointer;
+        color: #556;
+        border-radius: 10%;
+      }
+      button:hover {
+        background: #eeeeee;
+        color: black;
+      }
+    }
   }
   &__body {
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -83,7 +132,7 @@ export default defineComponent({
       }
       img {
         height: 2em;
-        margin-right: 0.5em;
+        margin: 0.5em;
       }
     }
   }
