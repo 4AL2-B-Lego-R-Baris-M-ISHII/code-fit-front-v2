@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
 import Admin from "../views/admin/Admin.vue";
 import NotFound from "../views/NotFound.vue";
+import CreateExercise from "../views/admin/CreateExercise.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin",
     name: "Admin",
     component: Admin,
+  },
+  {
+    path: "/admin/create-exercise",
+    name: "CreateExercise",
+    component: CreateExercise,
   },
   // catchall 404
   {

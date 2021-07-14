@@ -3,9 +3,12 @@
     <div class="exercise-title">
       <h1>Exercises</h1>
       <div class="exercise-title__create-btn">
-        <button @click="createExercise()">
-          <font-awesome-icon :icon="faPlusSquare" size="lg" />Create
-        </button>
+        <router-link :to="{ name: 'CreateExercise' }"
+          ><font-awesome-icon
+            :icon="faPlusSquare"
+            size="lg"
+          />Create</router-link
+        >
       </div>
     </div>
 
@@ -22,6 +25,7 @@ import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import ListExercise from "@/components/exercise/ListExercise.vue";
 
 export default defineComponent({
+  name: "Admin",
   components: { ListExercise, FontAwesomeIcon },
   setup() {
     const { exercises, getAllExercises } = useExercise();
@@ -32,11 +36,7 @@ export default defineComponent({
       isLoading.value = false;
     });
 
-    const createExercise = () => {
-      console.log("create exercise");
-    };
-
-    return { exercises, faPlusSquare, createExercise };
+    return { exercises, faPlusSquare };
   },
 });
 </script>
@@ -46,7 +46,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   align-items: center;
-  button {
+  a {
     cursor: pointer;
     margin-left: 1em;
     padding: 0.75em;
@@ -55,11 +55,12 @@ export default defineComponent({
     border: none;
     border-radius: 10%;
     color: #35495e;
+    text-decoration: none;
     :first-child {
       margin-right: 0.5em;
     }
   }
-  button:hover {
+  a:hover {
     color: black;
     background: #42b88344;
   }
