@@ -1,7 +1,7 @@
 <template>
   <div class="not-found">
-    <h2>404</h2>
-    <h3>Page not found</h3>
+    <h2>403</h2>
+    <h3>Forbidden</h3>
     <div>
       <router-link :to="{ name: 'Home' }">Return to home page</router-link>
     </div>

@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import Home from "../views/logged/Home.vue";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
+import Admin from "../views/admin/Admin.vue";
+import AdminExercise from "../views/admin/AdminExercise.vue";
 import NotFound from "../views/NotFound.vue";
+import Forbidden from "../views/Forbidden.vue";
+import CreateExercise from "../views/admin/CreateExercise.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +23,27 @@ const routes: Array<RouteRecordRaw> = [
     path: "/signup",
     name: "Signup",
     component: Signup,
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+  },
+  {
+    path: "/admin/create-exercise",
+    name: "CreateExercise",
+    component: CreateExercise,
+  },
+  {
+    path: "/admin/exercise/:exerciseId",
+    name: "AdminExercise",
+    component: AdminExercise,
+    props: true,
+  },
+  {
+    path: "/403",
+    name: "Forbidden",
+    component: Forbidden,
   },
   // catchall 404
   {

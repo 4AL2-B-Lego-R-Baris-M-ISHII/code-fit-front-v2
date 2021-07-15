@@ -1,15 +1,15 @@
 html,
 body {
   margin: 0;
+  font-family: Inter, sans-serif;
 }
 
 h1 {
-  font-family: Inter, sans-serif;
   letter-spacing: 4px;
 }
 
 .container {
-  padding: 0 10em;
+  padding: 0 15%;
   margin: 0;
 }
 
@@ -19,7 +19,7 @@ h1 {
   justify-content: space-evenly;
   padding: 1em 2em;
   label {
-    font-size: 1.7em;
+    font-size: 1.5em;
   }
   input {
     width: 70%;

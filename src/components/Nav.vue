@@ -1,30 +1,48 @@
 <template>
   <div>
     <header class="nav">
-      <div class="nav__logo">
+      <div class="nav__logo" @click="redirectToHome">
         <img src="@/assets/img/dumbell.png" alt="dumbell logo" />
         <div class="nav__logo__title">Code fit</div>
       </div>
-
-      <button v-if="token" @click="logout">logout</button>
+      <div class="button-container" v-if="token">
+        <router-link v-if="checkAdmin" :to="{ name: 'Admin' }"
+          >Administration</router-link
+        >
+        |
+        <button @click="logout">Logout</button>
+      </div>
     </header>
     <hr />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import useAuth from "@/composables/useAuth";
+import router from "@/router";
 
 export default defineComponent({
   name: "Nav",
   setup() {
-    const { logout, isLogin, token } = useAuth();
+    const { logout, isLogin, isAdmin, token, roles } = useAuth();
+    const checkAdmin = ref(false);
     isLogin();
+    isAdmin().then((isAdmin) => (checkAdmin.value = isAdmin));
+
+    watch(roles, async () => {
+      checkAdmin.value = await isAdmin();
+    });
+
+    const redirectToHome = () => {
+      router.push("/");
+    };
 
     return {
       logout,
+      checkAdmin,
       token,
+      redirectToHome,
     };
   },
 });
@@ -46,7 +64,7 @@ export default defineComponent({
     font-weight: bold;
     &__title {
       margin: 0.5em;
-      font-size: 2em;
+      font-size: 1.7em;
     }
   }
 
@@ -54,16 +72,23 @@ export default defineComponent({
     color: #666666;
     cursor: pointer;
   }
-  button {
+  .button-container {
+    margin-right: 1.5em;
+  }
+  button,
+  a {
+    color: black;
     font-size: 1em;
     font-weight: bolder;
     background: inherit;
-    padding: 1.5em;
-    margin-right: 1em;
+    padding: 1.2em;
+
     cursor: pointer;
     border: none;
+    text-decoration: none;
   }
-  button:hover {
+  button:hover,
+  a:hover {
     color: #666666;
     font-weight: bolder;
   }
