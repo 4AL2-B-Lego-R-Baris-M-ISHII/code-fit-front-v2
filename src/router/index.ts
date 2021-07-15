@@ -3,6 +3,7 @@ import Home from "../views/logged/Home.vue";
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
 import Admin from "../views/admin/Admin.vue";
+import AdminExercise from "../views/admin/AdminExercise.vue";
 import NotFound from "../views/NotFound.vue";
 import CreateExercise from "../views/admin/CreateExercise.vue";
 
@@ -31,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/create-exercise",
     name: "CreateExercise",
     component: CreateExercise,
+  },
+  {
+    path: "/admin/exercise",
+    name: "AdminExercise",
+    component: AdminExercise,
   },
   // catchall 404
   {

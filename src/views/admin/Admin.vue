@@ -32,8 +32,11 @@ export default defineComponent({
     const { isLoading } = useLoading();
     onMounted(async () => {
       isLoading.value = true;
-      await getAllExercises();
-      isLoading.value = false;
+      try {
+        await getAllExercises();
+      } finally {
+        isLoading.value = false;
+      }
     });
 
     return { exercises, faPlusSquare };

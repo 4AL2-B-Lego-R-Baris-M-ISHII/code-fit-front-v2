@@ -59,9 +59,12 @@ export default defineComponent({
 
     onMounted(async () => {
       isLoading.value = true;
-      languages.value = await getAllLanguages();
-      selectLanguage.value = languages.value[0].languageName;
-      isLoading.value = false;
+      try {
+        languages.value = await getAllLanguages();
+        selectLanguage.value = languages.value[0].languageName;
+      } finally {
+        isLoading.value = false;
+      }
     });
     return { handleSubmit, title, description, selectLanguage, languages };
   },
