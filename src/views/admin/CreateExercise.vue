@@ -35,6 +35,7 @@ import { defineComponent, onMounted, ref } from "vue";
 import useLanguage from "@/composables/useLanguage";
 import useLoading from "@/composables/useLoading";
 import useExercise from "@/composables/useExercise";
+import router from "@/router";
 
 export default defineComponent({
   name: "CreateExercise",
@@ -48,12 +49,20 @@ export default defineComponent({
     const { createExercise } = useExercise();
     const { isLoading } = useLoading();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       const languageName = selectLanguage.value;
-      console.log(selectLanguage.value);
       if (languageName !== undefined) {
-        console.log("creation of exercise wip");
-        createExercise(title.value, description.value, languageName);
+        try {
+          const createExerciseId = await createExercise(
+            title.value,
+            description.value,
+            languageName
+          );
+
+          router.push(`/admin/exercise/${createExerciseId}`);
+        } catch (err) {
+          console.error(err);
+        }
       }
     };
 

@@ -35,16 +35,17 @@ const routes: Array<RouteRecordRaw> = [
     component: CreateExercise,
   },
   {
-    path: "/admin/exercise",
+    path: "/admin/exercise/:exerciseId",
     name: "AdminExercise",
     component: AdminExercise,
+    props: true,
   },
-  // catchall 404
   {
     path: "/403",
     name: "Forbidden",
     component: Forbidden,
   },
+  // catchall 404
   {
     path: "/:catchAll(.*)",
     name: "NotFound",

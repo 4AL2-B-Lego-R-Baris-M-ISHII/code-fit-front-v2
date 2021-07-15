@@ -1,8 +1,15 @@
-<template>Admin Exercise</template>
+<template>Admin Exercise {{ exerciseId }}</template>
 
-<script>
-export default {};
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  props: ["exerciseId"],
+  setup(props) {
+    return {};
+  },
+});
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>
