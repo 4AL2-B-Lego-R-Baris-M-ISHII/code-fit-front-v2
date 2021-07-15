@@ -5,6 +5,7 @@ import Signup from "../views/Signup.vue";
 import Admin from "../views/admin/Admin.vue";
 import AdminExercise from "../views/admin/AdminExercise.vue";
 import NotFound from "../views/NotFound.vue";
+import Forbidden from "../views/Forbidden.vue";
 import CreateExercise from "../views/admin/CreateExercise.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -39,6 +40,11 @@ const routes: Array<RouteRecordRaw> = [
     component: AdminExercise,
   },
   // catchall 404
+  {
+    path: "/403",
+    name: "Forbidden",
+    component: Forbidden,
+  },
   {
     path: "/:catchAll(.*)",
     name: "NotFound",

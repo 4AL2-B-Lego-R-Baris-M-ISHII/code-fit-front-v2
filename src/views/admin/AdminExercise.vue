@@ -1,4 +1,4 @@
-<template>AdminExercise</template>
+<template>Admin Exercise</template>
 
 <script>
 export default {};
