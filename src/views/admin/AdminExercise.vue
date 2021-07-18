@@ -5,7 +5,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   props: ["exerciseId"],
-  setup(props) {
+  setup() {
     return {};
   },
 });

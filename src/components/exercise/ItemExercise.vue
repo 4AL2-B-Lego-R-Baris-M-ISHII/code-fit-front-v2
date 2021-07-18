@@ -6,7 +6,7 @@
         <button @click="editExercise(exercise)">
           <font-awesome-icon :icon="faEdit" />Update
         </button>
-        <button @click="deleteExercise(exercise)">
+        <button @click="deleteExerciseHandle(exercise)">
           <font-awesome-icon :icon="faTrash" />Delete
         </button>
       </div>
@@ -39,6 +39,7 @@ import { computed, defineComponent, PropType } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import useExercise from "@/composables/useExercise";
 
 export default defineComponent({
   components: {
@@ -50,7 +51,9 @@ export default defineComponent({
       type: Object as PropType<DtoExercise>,
     },
   },
-  setup(props) {
+  setup(props, ctx) {
+    const { deleteExercise } = useExercise();
+
     const languageNames = computed(() => {
       return props.exercise.cases.map((curCase) => {
         return curCase.language.languageName;
@@ -70,9 +73,13 @@ export default defineComponent({
       console.log(`update ${exercise.id}`);
     };
 
-    const deleteExercise = (exercise: DtoExercise) => {
-      // TODO delete exercise open modal
-      console.log(`delete ${exercise.id}`);
+    const deleteExerciseHandle = async (exercise: DtoExercise) => {
+      try {
+        // TODO delete exercise open modal
+        await deleteExercise(exercise.id);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     return {
@@ -81,7 +88,7 @@ export default defineComponent({
       faEdit,
       faTrash,
       editExercise,
-      deleteExercise,
+      deleteExerciseHandle,
     };
   },
 });

@@ -1,11 +1,11 @@
-import urlHelpers from "@/helpers/UrlHelpers";
+import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import DtoExercise from "@/types/exercise/dto-exercise";
 import { Ref, ref } from "vue";
 import CreateExerciseRequest from "@/types/exercise/CreateExerciseRequest";
 
+const exercises = ref<DtoExercise[]>([]);
 export default function useExercise() {
   const EXERCISE_PATH = "/exercise";
-  const exercises = ref<DtoExercise[]>([]);
 
   async function getAllExercises(): Promise<Ref<DtoExercise[]>> {
     try {
@@ -15,7 +15,7 @@ export default function useExercise() {
       throw new Error(err);
     }
 
-    return Promise.resolve(exercises);
+    return exercises;
   }
 
   async function createExercise(
@@ -37,5 +37,16 @@ export default function useExercise() {
     }
   }
 
-  return { exercises, getAllExercises, createExercise };
+  async function deleteExercise(exerciseId: number): Promise<void> {
+    await urlHelpers.sendNoContent(
+      RequestMethod.DELETE,
+      `${EXERCISE_PATH}/${exerciseId}`,
+      undefined
+    );
+    exercises.value = exercises.value.filter(
+      (exercise) => exerciseId !== exercise.id
+    );
+  }
+
+  return { exercises, getAllExercises, createExercise, deleteExercise };
 }

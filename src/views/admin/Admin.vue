@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, onUnmounted } from "vue";
 import useExercise from "@/composables/useExercise";
 import useLoading from "@/composables/useLoading";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -37,6 +37,10 @@ export default defineComponent({
       } finally {
         isLoading.value = false;
       }
+    });
+
+    onUnmounted(() => {
+      exercises.value = [];
     });
 
     return { exercises, faPlusSquare };
