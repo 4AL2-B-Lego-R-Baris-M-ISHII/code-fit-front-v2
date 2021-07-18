@@ -1,5 +1,6 @@
 import ErrorResponse from "@/types/ErrorResponse";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
+import useAuth from "@/composables/useAuth";
 
 export enum RequestMethod {
   GET = "GET",
@@ -19,7 +20,11 @@ class UrlHelpers {
         Authorization: `Bearer ${jwtTokenUtils.getToken()}`,
       },
     };
-    return await fetch(this.url + path, requestInfo);
+    const response = await fetch(this.url + path, requestInfo);
+    if (!response.ok) {
+      await this.manageErrorResponse(response);
+    }
+    return response;
   }
 
   async post<Req>(path: string, body: Req): Promise<number> {
@@ -39,8 +44,7 @@ class UrlHelpers {
     const responsePost = await fetch(request);
 
     if (!responsePost.ok) {
-      const result = await responsePost.json();
-      throw result as ErrorResponse;
+      this.manageErrorResponse(responsePost);
     }
     const location = responsePost.headers.get("location");
     if (location === null) {
@@ -75,7 +79,7 @@ class UrlHelpers {
     const response = await fetch(this.url + path, requestInfo);
     const result = await response.json();
     if (!response.ok) {
-      throw result as ErrorResponse;
+      this.manageErrorResponse(response);
     }
     return result as Res;
   }
@@ -98,10 +102,22 @@ class UrlHelpers {
     }
     const response = await fetch(this.url + path, requestInfo);
     if (!response.ok) {
-      const result = {} as ErrorResponse;
-      result.status = response.status;
-      result.message = response.statusText;
-      throw result;
+      this.manageErrorResponse(response);
+    }
+  }
+
+  private async manageErrorResponse(response: Response) {
+    switch (response.status) {
+      case 401: {
+        console.error("Problem authorization");
+        const { logout } = useAuth();
+        await logout();
+        break;
+      }
+      default: {
+        const result = await response.json();
+        throw result as ErrorResponse;
+      }
     }
   }
 }
