@@ -2,10 +2,7 @@
   <div>
     <hr />
     <div v-for="exercise in exercises" :key="exercise.id">
-      <ItemExercise
-        :exercise="exercise"
-        @exercise-deleted="exerciseDeletedHandle"
-      />
+      <ItemExercise :exercise="exercise" />
       <hr />
     </div>
   </div>
@@ -27,16 +24,6 @@ export default defineComponent({
       required: true,
       type: Array as PropType<DtoExercise[]>,
     },
-  },
-  setup(props) {
-    const { exercises } = useExercise();
-    async function exerciseDeletedHandle(exerciseId: number) {
-      // console.log(exerciseId);
-      // exercises.value.filter((exercise) => exerciseId !== exercise.id);
-    }
-    return {
-      exerciseDeletedHandle,
-    };
   },
 });
 </script>

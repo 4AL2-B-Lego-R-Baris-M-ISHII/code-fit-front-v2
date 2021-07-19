@@ -1,6 +1,7 @@
 <template>
   <Nav />
   <Spinner />
+  <ErrorModal />
   <router-view class="container" />
 </template>
 
@@ -8,9 +9,10 @@
 import { defineComponent } from "@vue/runtime-core";
 import Nav from "@/components/Nav.vue";
 import Spinner from "@/components/Spinner.vue";
+import ErrorModal from "@/components/modal/ErrorModal.vue";
 
 export default defineComponent({
-  components: { Nav, Spinner },
+  components: { Nav, Spinner, ErrorModal },
 });
 </script>
 

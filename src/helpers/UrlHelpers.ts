@@ -1,7 +1,5 @@
-import ErrorResponse from "@/types/ErrorResponse";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
 import useAuth from "@/composables/useAuth";
-import router from "@/router";
 
 export enum RequestMethod {
   GET = "GET",
@@ -103,11 +101,12 @@ class UrlHelpers {
     }
     const response = await fetch(this.url + path, requestInfo);
     if (!response.ok) {
-      this.manageErrorResponse(response);
+      await this.manageErrorResponse(response);
     }
   }
 
   private async manageErrorResponse(response: Response) {
+    const errorMessage = await response.text();
     switch (response.status) {
       case 401: {
         console.error("Problem authorization");
@@ -116,12 +115,10 @@ class UrlHelpers {
         break;
       }
       case 404: {
-        router.push("/404");
-        break;
+        throw `Ressource not found. Reason: "${errorMessage}". Please reload the page.`;
       }
       default: {
-        const result = await response.json();
-        throw result as ErrorResponse;
+        throw `Problem server. Reason: "${errorMessage}". If error persists, contact the administrator : codefit@gmail.com`;
       }
     }
   }
