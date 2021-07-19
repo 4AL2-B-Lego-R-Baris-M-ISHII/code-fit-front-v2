@@ -6,7 +6,7 @@
         <button @click="editExercise(exercise)">
           <font-awesome-icon :icon="faEdit" />Update
         </button>
-        <button @click="deleteExerciseHandle(exercise)">
+        <button @click="confirmDeleteExercise()">
           <font-awesome-icon :icon="faTrash" />Delete
         </button>
       </div>
@@ -32,18 +32,27 @@
       </div>
     </div>
   </div>
+
+  <ConfirmationModal
+    :title="`Delete exercise '${exercise.title}'`"
+    :showConfirmationModal="showModal"
+    @close="closeModal"
+    @confirm="deleteExerciseHandle(exercise)"
+  />
 </template>
 <script lang="ts">
 import DtoExercise from "@/types/exercise/dto-exercise";
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import useExercise from "@/composables/useExercise";
+import ConfirmationModal from "@/components/modal/ConfirmationModal.vue";
 
 export default defineComponent({
   components: {
     FontAwesomeIcon,
+    ConfirmationModal,
   },
   props: {
     exercise: {
@@ -51,7 +60,7 @@ export default defineComponent({
       type: Object as PropType<DtoExercise>,
     },
   },
-  setup(props, ctx) {
+  setup(props) {
     const { deleteExercise } = useExercise();
 
     const languageNames = computed(() => {
@@ -73,10 +82,18 @@ export default defineComponent({
       console.log(`update ${exercise.id}`);
     };
 
+    const showModal = ref(false);
+    const confirmDeleteExercise = () => {
+      showModal.value = true;
+    };
+    const closeModal = () => {
+      showModal.value = false;
+    };
+
     const deleteExerciseHandle = async (exercise: DtoExercise) => {
       try {
-        // TODO delete exercise open modal
         await deleteExercise(exercise.id);
+        showModal.value = false;
       } catch (err) {
         console.error(err);
       }
@@ -88,6 +105,9 @@ export default defineComponent({
       faEdit,
       faTrash,
       editExercise,
+      confirmDeleteExercise,
+      showModal,
+      closeModal,
       deleteExerciseHandle,
     };
   },
