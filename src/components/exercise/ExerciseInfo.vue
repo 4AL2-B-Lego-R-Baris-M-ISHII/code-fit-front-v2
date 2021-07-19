@@ -1,7 +1,15 @@
 <template>
-  <div>{{ exercise.title }}</div>
-  <div>{{ exercise.user.username }}</div>
-  <div>{{ exercise.description }}</div>
+  <section class="exercise-info">
+    <h2>Exercise info</h2>
+    <div class="exercise-info__group">
+      <div>Title :</div>
+      <div>{{ exercise.title }}</div>
+    </div>
+    <div class="exercise-info__group">
+      <div>Description:</div>
+      <div>{{ exercise.description }}</div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -20,3 +28,23 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.exercise-info {
+  margin: 0.5em 0;
+  padding: 1em;
+  border: solid;
+
+  h2 {
+    margin: 0 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  &__group {
+    display: flex;
+    div {
+      margin: 0.25em 0.5em;
+    }
+  }
+}
+</style>
