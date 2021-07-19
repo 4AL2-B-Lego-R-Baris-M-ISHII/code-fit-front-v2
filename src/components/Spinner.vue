@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" v-if="isLoading">
+  <div class="spinner-background" v-if="isLoading">
     <div class="img-container">
       <img src="../assets/img/spinner.svg" alt="spinner" />
     </div>
@@ -22,10 +22,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.backdrop {
+.spinner-background {
   top: 0;
   position: fixed;
-  background: rgba(0, 0, 0, 0.1);
+  //background: rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
   .img-container {

@@ -1,6 +1,7 @@
 import ErrorResponse from "@/types/ErrorResponse";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
 import useAuth from "@/composables/useAuth";
+import router from "@/router";
 
 export enum RequestMethod {
   GET = "GET",
@@ -112,6 +113,10 @@ class UrlHelpers {
         console.error("Problem authorization");
         const { logout } = useAuth();
         await logout();
+        break;
+      }
+      case 404: {
+        router.push("/404");
         break;
       }
       default: {
