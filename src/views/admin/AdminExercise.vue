@@ -9,6 +9,7 @@ import DtoUser from "@/types/auth/dto-user";
 import DtoExercise from "@/types/exercise/dto-exercise";
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
+import router from "@/router";
 
 export default defineComponent({
   props: {
@@ -20,7 +21,7 @@ export default defineComponent({
   components: {
     ExerciseInfo,
   },
-  setup(props) {
+  setup(props, ctx) {
     const { getOneExercise } = useExercise();
     const exercise = ref<DtoExercise>({
       title: "",
@@ -31,8 +32,10 @@ export default defineComponent({
     onMounted(async () => {
       try {
         exercise.value = await getOneExercise(props.exerciseId);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any | Response) {
+        if (err.status !== undefined && err.status === 404) {
+          router.push("/404");
+        }
       }
     });
     return { exercise };

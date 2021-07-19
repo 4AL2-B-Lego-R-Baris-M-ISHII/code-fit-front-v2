@@ -115,13 +115,8 @@ class UrlHelpers {
         await logout();
         break;
       }
-      case 404: {
-        router.push("/404");
-        break;
-      }
       default: {
-        const result = await response.json();
-        throw result as ErrorResponse;
+        throw response;
       }
     }
   }

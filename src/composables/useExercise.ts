@@ -48,18 +48,14 @@ export default function useExercise() {
     );
   }
 
-  async function getOneExercise(exerciseId: number): Promise<DtoExercise> {
-    try {
-      const response = await urlHelpers.get(`${EXERCISE_PATH}/${exerciseId}`);
-      if (response.ok) {
-        return await response.json();
-      }
-      const text = await response.text();
-      console.log(text);
-      throw Error(text);
-    } catch (err) {
-      throw Error(err);
+  async function getOneExercise(
+    exerciseId: number
+  ): Promise<DtoExercise | never> {
+    const response = await urlHelpers.get(`${EXERCISE_PATH}/${exerciseId}`);
+    if (response.ok) {
+      return await response.json();
     }
+    throw response;
   }
 
   return {
