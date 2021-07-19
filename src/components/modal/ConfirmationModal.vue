@@ -19,7 +19,16 @@ export default defineComponent({
   components: {
     Modal,
   },
-  props: ["title", "showConfirmationModal"],
+  props: {
+    title: {
+      required: true,
+      type: String,
+    },
+    showConfirmationModal: {
+      required: true,
+      type: Boolean,
+    },
+  },
   setup(props, ctx) {
     const closeModal = () => {
       ctx.emit("close");

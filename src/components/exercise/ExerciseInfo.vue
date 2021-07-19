@@ -1,6 +1,12 @@
 <template>
   <section class="exercise-info">
-    <h2>Exercise info</h2>
+    <div class="exercise-info__group">
+      <h2>Exercise info</h2>
+      <button @click="editExercise(exercise)">
+        <font-awesome-icon :icon="faEdit" />Change Info
+      </button>
+    </div>
+
     <div class="exercise-info__group">
       <div>Title :</div>
       <div>{{ exercise.title }}</div>
@@ -15,8 +21,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import DtoExercise from "@/types/exercise/dto-exercise";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 export default defineComponent({
+  components: {
+    FontAwesomeIcon,
+  },
   props: {
     exercise: {
       required: true,
@@ -24,7 +35,10 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+    const editExercise = () => {
+      console.log("editExercise");
+    };
+    return { editExercise, faEdit };
   },
 });
 </script>
@@ -45,6 +59,22 @@ export default defineComponent({
     div {
       margin: 0.25em 0.5em;
     }
+  }
+  button {
+    margin-left: 0.75em;
+    padding: 0.5em;
+    :first-child {
+      margin: 0 0.5em;
+    }
+    background: inherit;
+    border: none;
+    cursor: pointer;
+    color: #556;
+    border-radius: 10%;
+  }
+  button:hover {
+    background: #eeeeee;
+    color: black;
   }
 }
 </style>
