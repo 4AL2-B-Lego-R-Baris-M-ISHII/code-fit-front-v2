@@ -48,6 +48,7 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import useExercise from "@/composables/useExercise";
 import ConfirmationModal from "@/components/modal/ConfirmationModal.vue";
+import router from "@/router";
 
 export default defineComponent({
   components: {
@@ -78,8 +79,10 @@ export default defineComponent({
     };
 
     const editExercise = (exercise: DtoExercise) => {
-      // TODO update exercise redirect to page exercise
-      console.log(`update ${exercise.id}`);
+      router.push({
+        name: "AdminExercise",
+        params: { exerciseId: exercise.id },
+      });
     };
 
     const showModal = ref(false);
