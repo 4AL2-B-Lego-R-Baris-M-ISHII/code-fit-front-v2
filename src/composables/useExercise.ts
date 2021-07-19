@@ -48,5 +48,24 @@ export default function useExercise() {
     );
   }
 
-  return { exercises, getAllExercises, createExercise, deleteExercise };
+  async function getOneExercise(exerciseId: number): Promise<DtoExercise> {
+    try {
+      const response = await urlHelpers.get(`${EXERCISE_PATH}/${exerciseId}`);
+      if (response.ok) {
+        return await response.json();
+      }
+      const text = await response.text();
+      throw Error(text);
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+
+  return {
+    exercises,
+    getAllExercises,
+    createExercise,
+    deleteExercise,
+    getOneExercise,
+  };
 }

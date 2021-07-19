@@ -1,4 +1,4 @@
-import DtoUser from "../auth/DtoUser";
+import DtoUser from "../auth/dto-user";
 import DtoExerciseCase from "../exercise-case/dto-exercise-case";
 
 interface DtoExercise {

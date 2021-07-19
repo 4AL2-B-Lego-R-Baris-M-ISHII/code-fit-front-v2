@@ -22,7 +22,7 @@ import useExercise from "@/composables/useExercise";
 import useLoading from "@/composables/useLoading";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
-import ListExercise from "@/components/exercise/ListExercise.vue";
+import ListExercise from "@/components/exercises/ListExercise.vue";
 
 export default defineComponent({
   name: "Admin",

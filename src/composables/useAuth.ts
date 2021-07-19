@@ -1,7 +1,7 @@
 import router from "@/router";
 import { ref } from "vue";
 import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
-import DtoUser from "@/types/auth/DtoUser";
+import DtoUser from "@/types/auth/dto-user";
 import LoginRequest from "@/types/auth/LoginRequest";
 import SignupRequest from "@/types/auth/SignupRequest";
 import jwtTokenUtils from "@/utils/jwtTokenUtils";
