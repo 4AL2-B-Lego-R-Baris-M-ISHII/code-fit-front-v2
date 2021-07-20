@@ -19,8 +19,8 @@
   <EditExerciseModal
     :showEditExerciseModal="showEditExerciseModal"
     :exercise="exercise"
-    @close="toggleEditExerciseModal"
-    @edit="updateEditExercise"
+    @closed="toggleEditExerciseModal"
+    @edited="updateEditExercise"
   />
 </template>
 
@@ -36,20 +36,22 @@ export default defineComponent({
     FontAwesomeIcon,
     EditExerciseModal,
   },
+  emits: ["exercise-edited"],
   props: {
     exercise: {
       required: true,
       type: Object as PropType<DtoExercise>,
     },
   },
-  setup() {
+  setup(props, ctx) {
     const showEditExerciseModal = ref(false);
     const toggleEditExerciseModal = () => {
       showEditExerciseModal.value = !showEditExerciseModal.value;
     };
 
-    const updateEditExercise = (title: string, description: string) => {
-      console.log(title, description);
+    const updateEditExercise = async (title: string, description: string) => {
+      showEditExerciseModal.value = false;
+      ctx.emit("exercise-edited", title, description);
     };
 
     return {

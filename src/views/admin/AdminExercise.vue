@@ -1,5 +1,7 @@
 <template>
-  <div><ExerciseInfo :exercise="exercise" /></div>
+  <div>
+    <ExerciseInfo :exercise="exercise" @exercise-edited="updateExercise" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -31,6 +33,7 @@ export default defineComponent({
       cases: {} as DtoExerciseCase[],
     } as DtoExercise);
     const { showErrorModal, messageError } = useErrorModal();
+
     onMounted(async () => {
       try {
         exercise.value = await getOneExercise(parseInt(props.exerciseId));
@@ -53,7 +56,12 @@ export default defineComponent({
         }
       }
     });
-    return { exercise };
+
+    const updateExercise = (title: string, description: string) => {
+      exercise.value.title = title;
+      exercise.value.description = description;
+    };
+    return { exercise, updateExercise };
   },
 });
 </script>

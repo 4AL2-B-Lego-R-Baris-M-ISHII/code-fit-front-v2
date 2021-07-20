@@ -108,6 +108,9 @@ class UrlHelpers {
   private async manageErrorResponse(response: Response) {
     const errorMessage = await response.text();
     switch (response.status) {
+      case 400: {
+        throw response;
+      }
       case 401: {
         console.error("Problem authorization");
         const { logout } = useAuth();
