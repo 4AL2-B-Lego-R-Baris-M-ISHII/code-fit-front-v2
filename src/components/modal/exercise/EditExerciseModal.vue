@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#modals" v-if="showConfirmationModal">
+  <teleport to="#modals" v-if="showEditExerciseModal">
     <Modal @close="closeModal">
       <h2>{{ title }}</h2>
       <p>Whould you confirm your action ?</p>
@@ -16,6 +16,12 @@ import Modal from "@/components/modal/Modal.vue";
 export default defineComponent({
   components: {
     Modal
+  },
+  props: {
+    showEditExerciseModal: {
+      required: true,
+      type: Boolean
+    }
   }
   setup() {},
 });

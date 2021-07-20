@@ -16,7 +16,7 @@ export default defineComponent({
   props: {
     exerciseId: {
       required: true,
-      type: Number,
+      type: String,
     },
   },
   components: {
@@ -33,7 +33,7 @@ export default defineComponent({
     const { showErrorModal, messageError } = useErrorModal();
     onMounted(async () => {
       try {
-        exercise.value = await getOneExercise(props.exerciseId);
+        exercise.value = await getOneExercise(parseInt(props.exerciseId));
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
