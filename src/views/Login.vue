@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login container">
     <div class="login-page">
       <div class="login-page-content">
         <h2>Coding is like a sport</h2>

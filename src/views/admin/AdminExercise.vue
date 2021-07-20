@@ -38,10 +38,17 @@ export default defineComponent({
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
         } else {
-          const errorResponse = err as Response;
-          const check = await errorResponse.text();
+          if (typeof err === "string") {
+            if (err.startsWith("[404]")) {
+              router.push("/404");
+              return;
+            }
+            messageError.value = err;
+          } else {
+            const errorResponse = err as Response;
+            messageError.value = await errorResponse.text();
+          }
 
-          messageError.value = check.slice(check.indexOf(": ") + ": ".length);
           showErrorModal.value = true;
         }
       }

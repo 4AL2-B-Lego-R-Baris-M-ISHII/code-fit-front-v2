@@ -2,7 +2,7 @@
   <section class="exercise-info">
     <div class="exercise-info__group">
       <h2>Exercise info</h2>
-      <button @click="editExercise(exercise)">
+      <button @click="toggleEditExerciseModal">
         <font-awesome-icon :icon="faEdit" />Change Info
       </button>
     </div>
@@ -16,17 +16,25 @@
       <div>{{ exercise.description }}</div>
     </div>
   </section>
+  <EditExerciseModal
+    :showEditExerciseModal="showEditExerciseModal"
+    :exercise="exercise"
+    @close="toggleEditExerciseModal"
+    @edit="updateEditExercise"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import DtoExercise from "@/types/exercise/dto-exercise";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import EditExerciseModal from "@/components/modal/exercise/EditExerciseModal.vue";
 
 export default defineComponent({
   components: {
     FontAwesomeIcon,
+    EditExerciseModal,
   },
   props: {
     exercise: {
@@ -35,10 +43,21 @@ export default defineComponent({
     },
   },
   setup() {
-    const editExercise = () => {
-      console.log("editExercise");
+    const showEditExerciseModal = ref(false);
+    const toggleEditExerciseModal = () => {
+      showEditExerciseModal.value = !showEditExerciseModal.value;
     };
-    return { editExercise, faEdit };
+
+    const updateEditExercise = (title: string, description: string) => {
+      console.log(title, description);
+    };
+
+    return {
+      toggleEditExerciseModal,
+      faEdit,
+      showEditExerciseModal,
+      updateEditExercise,
+    };
   },
 });
 </script>
