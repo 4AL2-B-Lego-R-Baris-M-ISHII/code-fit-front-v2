@@ -108,6 +108,9 @@ class UrlHelpers {
   private async manageErrorResponse(response: Response) {
     const errorMessage = await response.text();
     switch (response.status) {
+      case 400: {
+        throw response;
+      }
       case 401: {
         console.error("Problem authorization");
         const { logout } = useAuth();
@@ -115,7 +118,10 @@ class UrlHelpers {
         break;
       }
       case 404: {
-        throw `Ressource not found. Reason: "${errorMessage}". Please reload the page.`;
+        const removeClasses = errorMessage.slice(
+          errorMessage.indexOf(": ") + ": ".length
+        );
+        throw `[404] Resource not found. Reason: "${removeClasses}".`;
       }
       default: {
         throw `Problem server. Reason: "${errorMessage}". If error persists, contact the administrator : codefit@gmail.com`;

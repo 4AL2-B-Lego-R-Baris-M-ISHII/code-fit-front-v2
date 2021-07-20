@@ -2,7 +2,7 @@
   <Nav />
   <Spinner />
   <ErrorModal />
-  <router-view class="container" />
+  <router-view />
 </template>
 
 <script lang="ts">

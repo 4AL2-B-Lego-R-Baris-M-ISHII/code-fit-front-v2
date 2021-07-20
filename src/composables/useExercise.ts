@@ -70,11 +70,34 @@ export default function useExercise() {
     throw response;
   }
 
+  async function updateExercise(
+    exerciseId: number,
+    title: string,
+    description: string
+  ) {
+    try {
+      await urlHelpers.sendNoContent(
+        RequestMethod.PUT,
+        `${EXERCISE_PATH}/${exerciseId}`,
+        { title, description }
+      );
+    } catch (err) {
+      if (typeof err === "string") {
+        throw err;
+      }
+      const errorResponse = err as Response;
+      if (errorResponse.status === 400) {
+        throw "Invalid title or description value, those values have to be not empty";
+      }
+    }
+  }
+
   return {
     exercises,
     getAllExercises,
     createExercise,
     deleteExercise,
     getOneExercise,
+    updateExercise,
   };
 }

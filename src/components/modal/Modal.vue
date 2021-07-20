@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" @click.self="closeModal">
+  <div class="backdrop" @click.self="$emit('close')">
     <div class="modal">
       <slot>default content to override</slot>
       <div class="actions">
@@ -10,16 +10,7 @@
 </template>
 
 <script>
-export default {
-  setup(props, ctx) {
-    const closeModal = () => {
-      ctx.emit("close");
-    };
-    return {
-      closeModal,
-    };
-  },
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -31,7 +22,7 @@ export default {
   border-radius: 10px;
   .actions {
     text-align: center;
-    margin: 30px 0 10px 0;
+    //margin: 30px 0 10px 0;
     color: #333;
   }
 }

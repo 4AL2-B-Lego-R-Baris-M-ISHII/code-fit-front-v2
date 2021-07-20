@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="exercise-title">
       <h1>Exercises</h1>
       <div class="exercise-title__create-btn">

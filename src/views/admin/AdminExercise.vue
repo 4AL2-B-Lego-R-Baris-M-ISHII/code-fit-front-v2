@@ -1,5 +1,7 @@
 <template>
-  <div><ExerciseInfo :exercise="exercise" /></div>
+  <div>
+    <ExerciseInfo :exercise="exercise" @exercise-edited="updateExercise" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -16,7 +18,7 @@ export default defineComponent({
   props: {
     exerciseId: {
       required: true,
-      type: Number,
+      type: String,
     },
   },
   components: {
@@ -31,22 +33,35 @@ export default defineComponent({
       cases: {} as DtoExerciseCase[],
     } as DtoExercise);
     const { showErrorModal, messageError } = useErrorModal();
+
     onMounted(async () => {
       try {
-        exercise.value = await getOneExercise(props.exerciseId);
+        exercise.value = await getOneExercise(parseInt(props.exerciseId));
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
         } else {
-          const errorResponse = err as Response;
-          const check = await errorResponse.text();
+          if (typeof err === "string") {
+            if (err.startsWith("[404]")) {
+              router.push("/404");
+              return;
+            }
+            messageError.value = err;
+          } else {
+            const errorResponse = err as Response;
+            messageError.value = await errorResponse.text();
+          }
 
-          messageError.value = check.slice(check.indexOf(": ") + ": ".length);
           showErrorModal.value = true;
         }
       }
     });
-    return { exercise };
+
+    const updateExercise = (title: string, description: string) => {
+      exercise.value.title = title;
+      exercise.value.description = description;
+    };
+    return { exercise, updateExercise };
   },
 });
 </script>
