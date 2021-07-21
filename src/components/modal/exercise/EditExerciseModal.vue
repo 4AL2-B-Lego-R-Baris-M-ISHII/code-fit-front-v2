@@ -197,9 +197,6 @@ export default defineComponent({
       }
     }
   }
-  .error-message {
-    color: red;
-  }
 }
 .actions {
   margin: 1em;

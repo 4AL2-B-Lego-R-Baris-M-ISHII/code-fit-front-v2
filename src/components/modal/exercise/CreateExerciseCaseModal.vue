@@ -11,12 +11,14 @@
           </select>
           <button
             class="create-exercise-case-modal__create-btn"
-            @click="createExerciseCase"
+            @click="handleSubmit"
           >
             Create Exercise Case
           </button>
         </div>
-        <div>Select language</div>
+        <div v-if="isSubmit && isError" class="error-message">
+          Language has to be selected
+        </div>
       </div>
     </Modal>
   </teleport>
@@ -25,8 +27,9 @@
 <script lang="ts">
 import DtoExercise from "@/types/exercise/dto-exercise";
 import DtoLanguage from "@/types/language/dto-language";
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 import Modal from "@/components/modal/Modal.vue";
+import useExerciseCase from "@/composables/useExerciseCase";
 
 export default defineComponent({
   components: {
@@ -46,28 +49,49 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["closed"],
-  setup(props) {
+  emits: ["closed", "created"],
+  setup(props, ctx) {
     const selectedLanguage = ref<string>();
     const isSubmit = ref(false);
+    const isError = ref(false);
+    const { createExerciseCase } = useExerciseCase();
 
     const availableLanguages = computed(() => {
       const usedLanguagesIds = props.exercise.cases.map(
         (curCase) => curCase.language.id
       );
-      console.log(props.languages);
       return props.languages.filter(
         (language) => !usedLanguagesIds.includes(language.id)
       );
     });
 
-    const createExerciseCase = () => {
+    const handleSubmit = async () => {
+      isSubmit.value = true;
       const foundLanguage = props.languages.find(
         (language) => language.languageName === selectedLanguage.value
       );
-      console.log(foundLanguage);
+      if (foundLanguage === undefined) {
+        isError.value = true;
+        return;
+      }
+      try {
+        await createExerciseCase(props.exercise.id, foundLanguage.id);
+        ctx.emit("created");
+      } catch (err) {
+        console.error(err);
+      }
     };
-    return { availableLanguages, selectedLanguage, createExerciseCase };
+
+    watch(selectedLanguage, () => {
+      isError.value = selectedLanguage.value === undefined;
+    });
+    return {
+      availableLanguages,
+      selectedLanguage,
+      handleSubmit,
+      isSubmit,
+      isError,
+    };
   },
 });
 </script>

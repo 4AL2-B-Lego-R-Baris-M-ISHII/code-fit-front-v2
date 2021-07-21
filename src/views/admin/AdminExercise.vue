@@ -4,7 +4,10 @@
       :exercise="currentExercise"
       @exercise-edited="updateExercise"
     />
-    <ExerciseCaseSelector :exercise="currentExercise" />
+    <ExerciseCaseSelector
+      :exercise="currentExercise"
+      @exerciseUpdated="findExercise"
+    />
 
     <h3>Start content</h3>
     <CodeEditor :defaultContent="startContent" :language="currentLanguage" />
@@ -44,7 +47,7 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        await getOneExercise(parseInt(props.exerciseId));
+        await findExercise();
         currentExerciseCase.value = currentExercise.value.cases[0];
         currentLanguage.value = currentExerciseCase.value.language.languageName;
         startContent.value = currentExerciseCase.value.startContent;
@@ -68,6 +71,10 @@ export default defineComponent({
       }
     });
 
+    const findExercise = async () => {
+      await getOneExercise(parseInt(props.exerciseId));
+    };
+
     const updateExercise = (title: string, description: string) => {
       if (currentExercise.value === undefined) {
         console.warn("current exercise undefined");
@@ -83,6 +90,7 @@ export default defineComponent({
       currentExerciseCase,
       startContent,
       currentLanguage,
+      findExercise,
     };
   },
 });

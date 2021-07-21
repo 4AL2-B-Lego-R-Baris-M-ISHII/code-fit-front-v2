@@ -32,6 +32,7 @@
     :exercise="exercise"
     :languages="allLanguages"
     @closed="toggleCreateExerciseCaseModal"
+    @created="closeModalAndEmitUpdateExercise"
   />
 </template>
 
@@ -60,7 +61,8 @@ export default defineComponent({
       type: Object as PropType<DtoExerciseCase>,
     },
   },
-  setup(props) {
+  emits: ["exerciseUpdated"],
+  setup(props, ctx) {
     const { getAllLanguages } = useLanguage();
     const allLanguages = ref<DtoLanguage[]>([]);
     const showCreateExerciseCaseModal = ref(false);
@@ -93,6 +95,10 @@ export default defineComponent({
       showCreateExerciseCaseModal.value = !showCreateExerciseCaseModal.value;
     };
 
+    const closeModalAndEmitUpdateExercise = () => {
+      showCreateExerciseCaseModal.value = false;
+      ctx.emit("exerciseUpdated");
+    };
     return {
       languageNames,
       faPlusSquare,
@@ -101,6 +107,7 @@ export default defineComponent({
       toggleCreateExerciseCaseModal,
       allLanguages,
       showCreateExerciseCaseModal,
+      closeModalAndEmitUpdateExercise,
     };
   },
 });
