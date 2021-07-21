@@ -36,7 +36,7 @@
   <ConfirmationModal
     :title="`Delete exercise '${exercise.title}'`"
     :showConfirmationModal="showModal"
-    @close="closeModal"
+    @closed="closeModal"
     @confirm="deleteExerciseHandle(exercise)"
   />
 </template>

@@ -1,18 +1,33 @@
 <template>
   <div>
-    <ExerciseInfo :exercise="exercise" @exercise-edited="updateExercise" />
-    <ExerciseCaseSelector :exercise="exercise" />
+    <ExerciseInfo
+      :exercise="currentExercise"
+      @exercise-edited="updateExercise"
+    />
+    <ExerciseCaseSelector
+      :exercise="currentExercise"
+      :selectedExerciseCase="currentExerciseCase"
+      @exerciseCaseCreated="addExerciseCase"
+      @selectedExerciseCaseUpdated="updateSelectedExerciseCase"
+    />
+
+    <h3>Start content</h3>
+    <CodeEditor :defaultContent="startContent" :language="currentLanguage" />
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+import router from "@/router";
+
 import useExercise from "@/composables/useExercise";
 import useExerciseCase from "@/composables/useExerciseCase";
-import { defineComponent, onMounted, ref } from "vue";
+import useErrorModal from "@/composables/useErrorModal";
+
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
-import router from "@/router";
-import useErrorModal from "@/composables/useErrorModal";
+import CodeEditor from "@/components/editor/CodeEditor.vue";
+import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 
 export default defineComponent({
   props: {
@@ -24,20 +39,21 @@ export default defineComponent({
   components: {
     ExerciseInfo,
     ExerciseCaseSelector,
-    // CodeEditor,
+    CodeEditor,
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
-    const { currentExerciseCase } = useExerciseCase();
+    const { currentExerciseCase, getOneExerciseCase } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
-    const content = ref("default!!!!");
+    const currentLanguage = ref("");
+    const startContent = ref("");
 
     onMounted(async () => {
       try {
-        await getOneExercise(parseInt(props.exerciseId));
-        if (currentExercise.value === undefined)
-          throw "Current exercise is undefined";
+        await findExercise();
         currentExerciseCase.value = currentExercise.value.cases[0];
+        currentLanguage.value = currentExerciseCase.value.language.languageName;
+        startContent.value = currentExerciseCase.value.startContent;
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
@@ -58,9 +74,11 @@ export default defineComponent({
       }
     });
 
+    const findExercise = async () => {
+      await getOneExercise(parseInt(props.exerciseId));
+    };
     const updateExercise = (title: string, description: string) => {
       if (currentExercise.value === undefined) {
-        console.warn("current exercise undefined");
         return;
       }
 
@@ -68,26 +86,30 @@ export default defineComponent({
       currentExercise.value.description = description;
     };
 
-    // const languageNames = computed(() => {
-    //   if (currentExercise.value.cases === undefined) return [];
-    //   return currentExercise.value.cases.map((curCase) => {
-    //     return curCase.language.languageName;
-    //   });
-    // });
+    const addExerciseCase = async (exerciseCaseId: number) => {
+      try {
+        const foundExerciseCase = await getOneExerciseCase(exerciseCaseId);
+        currentExercise.value.cases.push(foundExerciseCase);
+        currentExerciseCase.value = foundExerciseCase;
+        startContent.value = foundExerciseCase.startContent;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    const updateSelectedExerciseCase = (exerciseCase: DtoExerciseCase) => {
+      currentExerciseCase.value = exerciseCase;
+      startContent.value = exerciseCase.startContent;
+    };
 
-    // const mapLanguageName = new Map([
-    //   ["C11", "c"],
-    //   ["JAVA8", "java"],
-    // ]);
-    // const languageTitle = (languageName: string) => {
-    //   return mapLanguageName.get(languageName);
-    // };
     return {
-      exercise: currentExercise,
+      currentExercise,
       updateExercise,
-      content,
-      // languageNames,
-      // languageTitle,
+      currentExerciseCase,
+      startContent,
+      currentLanguage,
+      findExercise,
+      addExerciseCase,
+      updateSelectedExerciseCase,
     };
   },
 });

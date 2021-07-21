@@ -7,7 +7,7 @@ import CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/eclipse.css";
 import "codemirror/mode/clike/clike.js";
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
 
 export default defineComponent({
   props: {
@@ -21,14 +21,14 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
-    const content = ref(props.defaultContent);
+    const content = ref("");
     const mapLanguageMode = new Map<string, string>();
     mapLanguageMode.set("C11", "text/x-csrc");
     mapLanguageMode.set("JAVA8", "text/x-java");
+
     onMounted(() => {
       const textarea = document.getElementById("editor") as HTMLTextAreaElement;
       const editor = CodeMirror.fromTextArea(textarea, {
-        mode: mapLanguageMode.get(props.language),
         indentWithTabs: true,
         smartIndent: true,
         lineNumbers: true,
@@ -36,11 +36,19 @@ export default defineComponent({
         autofocus: true,
         theme: "eclipse",
       });
+      content.value = "nooop";
 
       editor.on("change", () => {
         ctx.emit("contentChange", editor.getValue());
       });
+
+      watch(props, () => {
+        content.value = props.defaultContent;
+        editor.setValue(content.value);
+        editor.setOption("mode", mapLanguageMode.get(props.language));
+      });
     });
+
     return {
       content,
     };
