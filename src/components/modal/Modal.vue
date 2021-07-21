@@ -28,6 +28,7 @@ export default {};
 }
 .backdrop {
   top: 0;
+  z-index: 3;
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
   width: 100%;

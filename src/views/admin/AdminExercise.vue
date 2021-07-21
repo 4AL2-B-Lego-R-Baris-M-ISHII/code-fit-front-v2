@@ -7,7 +7,7 @@
     <ExerciseCaseSelector :exercise="currentExercise" />
 
     <h3>Start content</h3>
-    <CodeEditor :defaultContent="currentExerciseCase.startContent" />
+    <CodeEditor :defaultContent="startContent" :language="currentLanguage" />
   </div>
 </template>
 
@@ -40,11 +40,15 @@ export default defineComponent({
     const { currentExerciseCase } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
     const content = ref("default!!!!");
+    const currentLanguage = ref("");
+    const startContent = ref("");
 
     onMounted(async () => {
       try {
         await getOneExercise(parseInt(props.exerciseId));
         currentExerciseCase.value = currentExercise.value.cases[0];
+        currentLanguage.value = currentExerciseCase.value.language.languageName;
+        startContent.value = currentExerciseCase.value.startContent;
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
@@ -79,6 +83,8 @@ export default defineComponent({
       updateExercise,
       content,
       currentExerciseCase,
+      startContent,
+      currentLanguage,
     };
   },
 });
