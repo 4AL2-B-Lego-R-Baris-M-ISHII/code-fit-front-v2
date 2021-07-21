@@ -1,11 +1,11 @@
 <template>
   <teleport to="#modals" v-if="showConfirmationModal">
-    <Modal @close="$emit('close')">
+    <Modal @close="$emit('closed')">
       <h2>{{ title }}</h2>
       <p>Whould you confirm your action ?</p>
       <template v-slot:links>
         <button class="confirm-btn" @click="$emit('confirm')">Confirm</button>
-        <button class="cancel-btn" @click="$emit('close')">Cancel</button>
+        <button class="cancel-btn" @click="$emit('closed')">Cancel</button>
       </template>
     </Modal>
   </teleport>
@@ -19,7 +19,7 @@ export default defineComponent({
   components: {
     Modal,
   },
-  emits: ["close", "confirm"],
+  emits: ["closed", "confirm"],
   props: {
     title: {
       required: true,

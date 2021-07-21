@@ -39,7 +39,6 @@ export default defineComponent({
     const { getOneExercise, currentExercise } = useExercise();
     const { currentExerciseCase } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
-    const content = ref("default!!!!");
     const currentLanguage = ref("");
     const startContent = ref("");
 
@@ -81,7 +80,6 @@ export default defineComponent({
     return {
       currentExercise,
       updateExercise,
-      content,
       currentExerciseCase,
       startContent,
       currentLanguage,

@@ -1,6 +1,6 @@
 <template>
   <teleport to="#modals" v-if="showErrorModal">
-    <Modal @close="closeModal">
+    <Modal @closed="closeModal">
       <h2>
         <font-awesome-icon :icon="faTimesCircle" size="lg" /><span
           >Problem request</span

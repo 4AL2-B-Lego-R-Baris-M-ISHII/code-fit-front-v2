@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" @click.self="$emit('close')">
+  <div class="backdrop" @click.self="$emit('closed')">
     <div class="modal">
       <slot>default content to override</slot>
       <div class="actions">

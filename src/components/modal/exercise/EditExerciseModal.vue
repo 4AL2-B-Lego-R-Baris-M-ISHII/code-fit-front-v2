@@ -1,6 +1,6 @@
 <template>
   <teleport to="#modals" v-if="showEditExerciseModal">
-    <Modal @close="$emit('closed')">
+    <Modal @closed="$emit('closed')">
       <div class="edit-exercise-form">
         <h2>Edit exercise title and description</h2>
         <form @submit.prevent="handleSubmit">
