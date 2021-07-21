@@ -13,6 +13,7 @@
       </div>
     </div>
     <button
+      v-if="showCreateButton"
       class="exercise-case-selector__create-btn"
       title="Create Exercise Case"
       @click="toggleCreateExerciseCaseModal"
@@ -23,6 +24,7 @@
       v-if="showDeleteButton"
       class="exercise-case-selector__delete-btn"
       title="Delete Current Exercise Case"
+      @click="toggleConfirmationModal"
     >
       <font-awesome-icon :icon="faTrash" size="lg" />
     </button>
@@ -33,6 +35,12 @@
     :languages="allLanguages"
     @closed="toggleCreateExerciseCaseModal"
     @created="closeModalAndEmitUpdateExercise"
+  />
+  <ConfirmationModal
+    :title="titleConfirmationModal"
+    :showConfirmationModal="showConfirmationModal"
+    @closed="toggleConfirmationModal"
+    @confirm="deleteCurrentExerciseCase"
   />
 </template>
 
@@ -50,16 +58,20 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
 import useLanguage from "@/composables/useLanguage";
+import useExerciseCase from "@/composables/useExerciseCase";
+
 import DtoLanguage from "@/types/language/dto-language";
 
 import CreateExerciseCaseModal from "@/components/modal/exercise/CreateExerciseCaseModal.vue";
-import useExerciseCase from "@/composables/useExerciseCase";
+import ConfirmationModal from "@/components/modal/ConfirmationModal.vue";
 
 export default defineComponent({
   components: {
     FontAwesomeIcon,
     CreateExerciseCaseModal,
+    ConfirmationModal,
   },
   props: {
     exercise: {
@@ -69,12 +81,21 @@ export default defineComponent({
       type: Object as PropType<DtoExerciseCase>,
     },
   },
-  emits: ["exerciseCaseCreated", "selectedExerciseCaseUpdated"],
+  emits: [
+    "exerciseCaseCreated",
+    "selectedExerciseCaseUpdated",
+    "exerciseCaseDeleted",
+  ],
   setup(props, ctx) {
     const { getAllLanguages } = useLanguage();
     const allLanguages = ref<DtoLanguage[]>([]);
-    const showCreateExerciseCaseModal = ref(false);
     const selectedLanguage = ref<string>();
+
+    const { currentExerciseCase, deleteExerciseCase } = useExerciseCase();
+    const showCreateExerciseCaseModal = ref(false);
+
+    const titleConfirmationModal = ref("");
+    const showConfirmationModal = ref(false);
 
     onMounted(async () => {
       try {
@@ -91,7 +112,6 @@ export default defineComponent({
         return curCase.language.languageName;
       });
     });
-
     const showDeleteButton = computed(() => {
       return (
         props.exercise !== undefined &&
@@ -100,13 +120,33 @@ export default defineComponent({
       );
     });
 
+    const showCreateButton = computed(() => {
+      return (
+        props.exercise !== undefined &&
+        props.exercise.cases !== undefined &&
+        props.exercise.cases.length < allLanguages.value.length
+      );
+    });
     const toggleCreateExerciseCaseModal = () => {
       showCreateExerciseCaseModal.value = !showCreateExerciseCaseModal.value;
     };
-
     const closeModalAndEmitUpdateExercise = (newExerciseCaseId: number) => {
       showCreateExerciseCaseModal.value = false;
       ctx.emit("exerciseCaseCreated", newExerciseCaseId);
+    };
+
+    const toggleConfirmationModal = () => {
+      titleConfirmationModal.value = `Delete exercise case with language '${currentExerciseCase.value.language.languageName}'`;
+      showConfirmationModal.value = !showConfirmationModal.value;
+    };
+    const deleteCurrentExerciseCase = async () => {
+      try {
+        await deleteExerciseCase(currentExerciseCase.value.id);
+        showConfirmationModal.value = false;
+        ctx.emit("exerciseCaseDeleted", currentExerciseCase.value.id);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     watch(props, () => {
@@ -136,6 +176,11 @@ export default defineComponent({
       showCreateExerciseCaseModal,
       closeModalAndEmitUpdateExercise,
       selectedLanguage,
+      deleteCurrentExerciseCase,
+      showConfirmationModal,
+      titleConfirmationModal,
+      toggleConfirmationModal,
+      showCreateButton,
     };
   },
 });

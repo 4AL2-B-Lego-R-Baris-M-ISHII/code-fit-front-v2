@@ -3,22 +3,29 @@
     <Modal @closed="$emit('closed')">
       <div class="create-exercise-case-modal">
         <h2>Select language of new exercise case</h2>
-        <div class="create-exercise-case-modal__languages">
-          <select v-model="selectedLanguage">
-            <option v-for="language in availableLanguages" :key="language.id">
-              {{ language.languageName }}
-            </option>
-          </select>
-          <button
-            class="create-exercise-case-modal__create-btn"
-            @click="handleSubmit"
-          >
-            Create Exercise Case
-          </button>
-        </div>
-        <div v-if="isSubmit && isError" class="error-message">
-          Language has to be selected
-        </div>
+        <div class="create-exercise-case-modal__languages"></div>
+      </div>
+      <template v-slot:links>
+        <select v-model="selectedLanguage">
+          <option v-for="language in availableLanguages" :key="language.id">
+            {{ language.languageName }}
+          </option>
+        </select>
+        <button
+          class="create-exercise-case-modal__create-btn"
+          @click="handleSubmit"
+        >
+          Create Exercise Case
+        </button>
+        <button
+          class="create-exercise-case-modal__cancel-btn"
+          @click="$emit('closed')"
+        >
+          Cancel
+        </button>
+      </template>
+      <div v-if="isSubmit && isError" class="error-message">
+        Language has to be selected
       </div>
     </Modal>
   </teleport>
@@ -30,6 +37,7 @@ import DtoLanguage from "@/types/language/dto-language";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
 import Modal from "@/components/modal/Modal.vue";
 import useExerciseCase from "@/composables/useExerciseCase";
+import useLoading from "@/composables/useLoading";
 
 export default defineComponent({
   components: {
@@ -55,6 +63,7 @@ export default defineComponent({
     const isSubmit = ref(false);
     const isError = ref(false);
     const { createExerciseCase } = useExerciseCase();
+    const { isLoading } = useLoading();
 
     const availableLanguages = computed(() => {
       return getUnusedLanguages();
@@ -80,12 +89,14 @@ export default defineComponent({
         return;
       }
       try {
+        isLoading.value = true;
         const newExerciseCaseId = await createExerciseCase(
           props.exercise.id,
           foundLanguage.id
         );
         ctx.emit("created", newExerciseCaseId);
       } catch (err) {
+        isLoading.value = false;
         console.error(err);
       }
     };
@@ -128,6 +139,25 @@ export default defineComponent({
   &__create-btn:hover {
     color: black;
     background: #42b88344;
+  }
+  &__cancel-btn {
+    padding: 0.5em 1em;
+    border: none;
+    cursor: pointer;
+    cursor: pointer;
+    margin-left: 1em;
+    padding: 0.75em;
+    background: #35495e11;
+    border-color: #999;
+    border-radius: 10%;
+    width: 6em;
+    color: #35495e;
+    text-decoration: none;
+  }
+  &__cancel-btn:hover {
+    color: black;
+    background: #ca444446;
+    font-weight: bold;
   }
 }
 </style>

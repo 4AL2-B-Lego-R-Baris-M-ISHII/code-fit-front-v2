@@ -9,6 +9,7 @@
       :selectedExerciseCase="currentExerciseCase"
       @exerciseCaseCreated="addExerciseCase"
       @selectedExerciseCaseUpdated="updateSelectedExerciseCase"
+      @exerciseCaseDeleted="removeExerciseCaseOfExercise"
     />
 
     <h3>Start content</h3>
@@ -28,6 +29,7 @@ import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
+import useLoading from "@/composables/useLoading";
 
 export default defineComponent({
   props: {
@@ -45,6 +47,7 @@ export default defineComponent({
     const { getOneExercise, currentExercise } = useExercise();
     const { currentExerciseCase, getOneExerciseCase } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
+    const { isLoading } = useLoading();
     const currentLanguage = ref("");
     const startContent = ref("");
 
@@ -92,6 +95,7 @@ export default defineComponent({
         currentExercise.value.cases.push(foundExerciseCase);
         currentExerciseCase.value = foundExerciseCase;
         startContent.value = foundExerciseCase.startContent;
+        isLoading.value = false;
       } catch (err) {
         console.error(err);
       }
@@ -99,6 +103,15 @@ export default defineComponent({
     const updateSelectedExerciseCase = (exerciseCase: DtoExerciseCase) => {
       currentExerciseCase.value = exerciseCase;
       startContent.value = exerciseCase.startContent;
+    };
+
+    const removeExerciseCaseOfExercise = (exerciseCaseId: number) => {
+      const cases = currentExercise.value.cases.filter((curCase) => {
+        return curCase.id !== exerciseCaseId;
+      });
+      currentExercise.value.cases = cases;
+      currentExerciseCase.value = cases[0];
+      isLoading.value = false;
     };
 
     return {
@@ -110,14 +123,13 @@ export default defineComponent({
       findExercise,
       addExerciseCase,
       updateSelectedExerciseCase,
+      removeExerciseCaseOfExercise,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-h2 {
-}
 .languages {
   margin-left: 1em;
   span {
