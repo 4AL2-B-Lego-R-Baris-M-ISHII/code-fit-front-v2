@@ -5,7 +5,7 @@
     </div>
     <div>
       <div class="cases-languages">
-        <select>
+        <select v-model="selectedLanguage">
           <option v-for="language in languageNames" :key="language">
             {{ language }}
           </option>
@@ -39,7 +39,14 @@
 <script lang="ts">
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExercise from "@/types/exercise/dto-exercise";
-import { computed, defineComponent, onMounted, PropType, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  PropType,
+  ref,
+  watch,
+} from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -47,6 +54,7 @@ import useLanguage from "@/composables/useLanguage";
 import DtoLanguage from "@/types/language/dto-language";
 
 import CreateExerciseCaseModal from "@/components/modal/exercise/CreateExerciseCaseModal.vue";
+import useExerciseCase from "@/composables/useExerciseCase";
 
 export default defineComponent({
   components: {
@@ -61,11 +69,12 @@ export default defineComponent({
       type: Object as PropType<DtoExerciseCase>,
     },
   },
-  emits: ["exerciseUpdated"],
+  emits: ["exerciseCaseCreated", "selectedExerciseCaseUpdated"],
   setup(props, ctx) {
     const { getAllLanguages } = useLanguage();
     const allLanguages = ref<DtoLanguage[]>([]);
     const showCreateExerciseCaseModal = ref(false);
+    const selectedLanguage = ref<string>();
 
     onMounted(async () => {
       try {
@@ -95,10 +104,28 @@ export default defineComponent({
       showCreateExerciseCaseModal.value = !showCreateExerciseCaseModal.value;
     };
 
-    const closeModalAndEmitUpdateExercise = () => {
+    const closeModalAndEmitUpdateExercise = (newExerciseCaseId: number) => {
       showCreateExerciseCaseModal.value = false;
-      ctx.emit("exerciseUpdated");
+      ctx.emit("exerciseCaseCreated", newExerciseCaseId);
     };
+
+    watch(props, () => {
+      if (props.selectedExerciseCase?.language) {
+        selectedLanguage.value =
+          props.selectedExerciseCase.language.languageName;
+      }
+    });
+
+    watch(selectedLanguage, () => {
+      if (props.exercise?.cases) {
+        const newSelectedExerciseCase = props.exercise.cases.find(
+          (curCase) => curCase.language.languageName === selectedLanguage.value
+        );
+        if (newSelectedExerciseCase) {
+          ctx.emit("selectedExerciseCaseUpdated", newSelectedExerciseCase);
+        }
+      }
+    });
     return {
       languageNames,
       faPlusSquare,
@@ -108,6 +135,7 @@ export default defineComponent({
       allLanguages,
       showCreateExerciseCaseModal,
       closeModalAndEmitUpdateExercise,
+      selectedLanguage,
     };
   },
 });

@@ -23,8 +23,27 @@ export default function useExerciseCase() {
     }
   }
 
+  async function getOneExerciseCase(
+    exerciseCaseId: number
+  ): Promise<DtoExerciseCase> {
+    try {
+      const response = await urlHelpers.get(
+        `${EXERCISE_CASE_PATH}/${exerciseCaseId}`
+      );
+      if (response.ok) {
+        return await response.json();
+      }
+      const errorMessage = await response.text();
+      throw errorMessage;
+    } catch (err) {
+      const errorMessage = `error find exercise case by id '${exerciseCaseId}'`;
+      throw Error(errorMessage);
+    }
+  }
+
   return {
     currentExerciseCase,
     createExerciseCase,
+    getOneExerciseCase,
   };
 }

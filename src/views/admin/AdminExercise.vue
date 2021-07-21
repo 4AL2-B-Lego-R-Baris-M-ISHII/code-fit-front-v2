@@ -6,7 +6,9 @@
     />
     <ExerciseCaseSelector
       :exercise="currentExercise"
-      @exerciseUpdated="findExercise"
+      :selectedExerciseCase="currentExerciseCase"
+      @exerciseCaseCreated="addExerciseCase"
+      @selectedExerciseCaseUpdated="updateSelectedExerciseCase"
     />
 
     <h3>Start content</h3>
@@ -25,6 +27,7 @@ import useErrorModal from "@/composables/useErrorModal";
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
+import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 
 export default defineComponent({
   props: {
@@ -40,7 +43,7 @@ export default defineComponent({
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
-    const { currentExerciseCase } = useExerciseCase();
+    const { currentExerciseCase, getOneExerciseCase } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
     const currentLanguage = ref("");
     const startContent = ref("");
@@ -74,16 +77,30 @@ export default defineComponent({
     const findExercise = async () => {
       await getOneExercise(parseInt(props.exerciseId));
     };
-
     const updateExercise = (title: string, description: string) => {
       if (currentExercise.value === undefined) {
-        console.warn("current exercise undefined");
         return;
       }
 
       currentExercise.value.title = title;
       currentExercise.value.description = description;
     };
+
+    const addExerciseCase = async (exerciseCaseId: number) => {
+      try {
+        const foundExerciseCase = await getOneExerciseCase(exerciseCaseId);
+        currentExercise.value.cases.push(foundExerciseCase);
+        currentExerciseCase.value = foundExerciseCase;
+        startContent.value = foundExerciseCase.startContent;
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    const updateSelectedExerciseCase = (exerciseCase: DtoExerciseCase) => {
+      currentExerciseCase.value = exerciseCase;
+      startContent.value = exerciseCase.startContent;
+    };
+
     return {
       currentExercise,
       updateExercise,
@@ -91,6 +108,8 @@ export default defineComponent({
       startContent,
       currentLanguage,
       findExercise,
+      addExerciseCase,
+      updateSelectedExerciseCase,
     };
   },
 });

@@ -57,13 +57,18 @@ export default defineComponent({
     const { createExerciseCase } = useExerciseCase();
 
     const availableLanguages = computed(() => {
+      return getUnusedLanguages();
+    });
+
+    function getUnusedLanguages() {
+      if (props.exercise.cases === undefined) return [];
       const usedLanguagesIds = props.exercise.cases.map(
         (curCase) => curCase.language.id
       );
       return props.languages.filter(
         (language) => !usedLanguagesIds.includes(language.id)
       );
-    });
+    }
 
     const handleSubmit = async () => {
       isSubmit.value = true;
@@ -75,12 +80,21 @@ export default defineComponent({
         return;
       }
       try {
-        await createExerciseCase(props.exercise.id, foundLanguage.id);
-        ctx.emit("created");
+        const newExerciseCaseId = await createExerciseCase(
+          props.exercise.id,
+          foundLanguage.id
+        );
+        ctx.emit("created", newExerciseCaseId);
       } catch (err) {
         console.error(err);
       }
     };
+
+    watch(props, () => {
+      const unusedLanguages = getUnusedLanguages();
+      if (unusedLanguages.length === 0) return;
+      selectedLanguage.value = unusedLanguages[0].languageName;
+    });
 
     watch(selectedLanguage, () => {
       isError.value = selectedLanguage.value === undefined;
