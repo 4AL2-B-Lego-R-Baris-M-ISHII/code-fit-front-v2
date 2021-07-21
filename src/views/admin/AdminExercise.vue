@@ -1,18 +1,27 @@
 <template>
   <div>
-    <ExerciseInfo :exercise="exercise" @exercise-edited="updateExercise" />
-    <ExerciseCaseSelector :exercise="exercise" />
+    <ExerciseInfo
+      :exercise="currentExercise"
+      @exercise-edited="updateExercise"
+    />
+    <ExerciseCaseSelector :exercise="currentExercise" />
+
+    <h3>Start content</h3>
+    <CodeEditor :defaultContent="currentExerciseCase.startContent" />
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+import router from "@/router";
+
 import useExercise from "@/composables/useExercise";
 import useExerciseCase from "@/composables/useExerciseCase";
-import { defineComponent, onMounted, ref } from "vue";
+import useErrorModal from "@/composables/useErrorModal";
+
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
-import router from "@/router";
-import useErrorModal from "@/composables/useErrorModal";
+import CodeEditor from "@/components/editor/CodeEditor.vue";
 
 export default defineComponent({
   props: {
@@ -24,7 +33,7 @@ export default defineComponent({
   components: {
     ExerciseInfo,
     ExerciseCaseSelector,
-    // CodeEditor,
+    CodeEditor,
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
@@ -35,8 +44,6 @@ export default defineComponent({
     onMounted(async () => {
       try {
         await getOneExercise(parseInt(props.exerciseId));
-        if (currentExercise.value === undefined)
-          throw "Current exercise is undefined";
         currentExerciseCase.value = currentExercise.value.cases[0];
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
@@ -67,27 +74,11 @@ export default defineComponent({
       currentExercise.value.title = title;
       currentExercise.value.description = description;
     };
-
-    // const languageNames = computed(() => {
-    //   if (currentExercise.value.cases === undefined) return [];
-    //   return currentExercise.value.cases.map((curCase) => {
-    //     return curCase.language.languageName;
-    //   });
-    // });
-
-    // const mapLanguageName = new Map([
-    //   ["C11", "c"],
-    //   ["JAVA8", "java"],
-    // ]);
-    // const languageTitle = (languageName: string) => {
-    //   return mapLanguageName.get(languageName);
-    // };
     return {
-      exercise: currentExercise,
+      currentExercise,
       updateExercise,
       content,
-      // languageNames,
-      // languageTitle,
+      currentExerciseCase,
     };
   },
 });
