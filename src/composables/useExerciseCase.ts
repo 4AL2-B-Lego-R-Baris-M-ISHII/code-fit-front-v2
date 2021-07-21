@@ -1,6 +1,6 @@
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import { ref } from "vue";
-import urlHelpers from "@/helpers/UrlHelpers";
+import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import CreateExerciseCaseRequest from "@/types/exercise-case/CreateExerciseCaseRequest";
 
 const currentExerciseCase = ref<DtoExerciseCase>({} as DtoExerciseCase);
@@ -41,9 +41,23 @@ export default function useExerciseCase() {
     }
   }
 
+  async function deleteExerciseCase(exerciseCaseId: number) {
+    try {
+      await urlHelpers.sendNoContent(
+        RequestMethod.DELETE,
+        `${EXERCISE_CASE_PATH}/${exerciseCaseId}`,
+        undefined
+      );
+    } catch (err) {
+      const errorMessage = `error delete exercise case by id '${exerciseCaseId}'`;
+      throw Error(errorMessage);
+    }
+  }
+
   return {
     currentExerciseCase,
     createExerciseCase,
     getOneExerciseCase,
+    deleteExerciseCase,
   };
 }
