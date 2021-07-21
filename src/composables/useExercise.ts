@@ -5,6 +5,7 @@ import CreateExerciseRequest from "@/types/exercise/CreateExerciseRequest";
 import useErrorModal from "./useErrorModal";
 
 const exercises = ref<DtoExercise[]>([]);
+const currentExercise = ref<DtoExercise>({} as DtoExercise);
 export default function useExercise() {
   const EXERCISE_PATH = "/exercise";
   const { openErrorModal } = useErrorModal();
@@ -62,10 +63,11 @@ export default function useExercise() {
 
   async function getOneExercise(
     exerciseId: number
-  ): Promise<DtoExercise | never> {
+  ): Promise<undefined | never> {
     const response = await urlHelpers.get(`${EXERCISE_PATH}/${exerciseId}`);
     if (response.ok) {
-      return await response.json();
+      currentExercise.value = await response.json();
+      return;
     }
     throw response;
   }
@@ -94,6 +96,7 @@ export default function useExercise() {
 
   return {
     exercises,
+    currentExercise,
     getAllExercises,
     createExercise,
     deleteExercise,
