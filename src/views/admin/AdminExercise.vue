@@ -19,8 +19,8 @@
       <hr />
       <div class="save-exercise-case">
         <h3>Save or validate exercise case</h3>
-        <button>Save</button>
-        <button>Validate</button>
+        <button class="save-btn">Save</button>
+        <button class="validate-btn">Validate</button>
       </div>
     </div>
     <div class="admin-exercise__solution-start-content">
@@ -215,6 +215,32 @@ export default defineComponent({
 
   .save-exercise-case {
     padding: 1em;
+    .save-btn {
+      margin-left: 0.75em;
+      padding: 0.5em 1em;
+      background: inherit;
+      border: none;
+      cursor: pointer;
+      color: #556;
+      border-radius: 10%;
+    }
+    .save-btn:hover {
+      background: #42b8833a;
+      color: black;
+    }
+    .validate-btn {
+      margin-left: 0.75em;
+      padding: 0.5em 1em;
+      background: inherit;
+      border: none;
+      cursor: pointer;
+      color: #556;
+      border-radius: 10%;
+    }
+    .validate-btn:hover {
+      background: #0184ff1c;
+      color: black;
+    }
   }
   &__solution-start-content {
     display: flex;
