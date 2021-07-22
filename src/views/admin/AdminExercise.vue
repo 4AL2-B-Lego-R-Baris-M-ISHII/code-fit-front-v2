@@ -18,8 +18,9 @@
       </div>
       <hr />
       <div class="save-exercise-case">
-        <h3>Save exercise case</h3>
-        <div></div>
+        <h3>Save or validate exercise case</h3>
+        <button>Save</button>
+        <button>Validate</button>
       </div>
     </div>
     <div class="admin-exercise__solution-start-content">
@@ -29,6 +30,7 @@
           :defaultContent="solution"
           :language="currentLanguage"
           :id="'solution-editor'"
+          @contentChange="updateSolution"
         />
       </div>
       <div class="start-content">
@@ -37,6 +39,7 @@
           :defaultContent="startContent"
           :language="currentLanguage"
           :id="'start-content-editor'"
+          @contentChange="updateStartContent"
         />
       </div>
     </div>
@@ -89,6 +92,7 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
+        isLoading.value = true;
         await findExercise();
         currentExerciseCase.value = currentExercise.value.cases[0];
         currentLanguage.value = currentExerciseCase.value.language.languageName;
@@ -111,6 +115,8 @@ export default defineComponent({
 
           showErrorModal.value = true;
         }
+      } finally {
+        isLoading.value = false;
       }
     });
 
@@ -153,6 +159,12 @@ export default defineComponent({
       currentExerciseCase.value = cases[0];
       isLoading.value = false;
     };
+    const updateSolution = (newSolution: string) => {
+      currentExerciseCase.value.solution = newSolution;
+    };
+    const updateStartContent = (newStartContent: string) => {
+      currentExerciseCase.value.startContent = newStartContent;
+    };
 
     // Exercise test
     const createEmptyExerciseTest = () => {
@@ -170,6 +182,8 @@ export default defineComponent({
       addExerciseCase,
       updateSelectedExerciseCase,
       removeExerciseCaseOfExercise,
+      updateSolution,
+      updateStartContent,
       createEmptyExerciseTest,
       solution,
     };
