@@ -66,6 +66,7 @@ import DtoLanguage from "@/types/language/dto-language";
 
 import CreateExerciseCaseModal from "@/components/modal/exercise/CreateExerciseCaseModal.vue";
 import ConfirmationModal from "@/components/modal/ConfirmationModal.vue";
+import useLoading from "@/composables/useLoading";
 
 export default defineComponent({
   components: {
@@ -93,6 +94,8 @@ export default defineComponent({
 
     const { currentExerciseCase, deleteExerciseCase } = useExerciseCase();
     const showCreateExerciseCaseModal = ref(false);
+
+    const { isLoading } = useLoading();
 
     const titleConfirmationModal = ref("");
     const showConfirmationModal = ref(false);
@@ -141,6 +144,7 @@ export default defineComponent({
     };
     const deleteCurrentExerciseCase = async () => {
       try {
+        isLoading.value = true;
         await deleteExerciseCase(currentExerciseCase.value.id);
         showConfirmationModal.value = false;
         ctx.emit("exerciseCaseDeleted", currentExerciseCase.value.id);

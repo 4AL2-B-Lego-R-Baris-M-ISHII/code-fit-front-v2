@@ -16,6 +16,11 @@
           @exerciseCaseDeleted="removeExerciseCaseOfExercise"
         />
       </div>
+      <hr />
+      <div class="save-exercise-case">
+        <h3>Save exercise case</h3>
+        <div></div>
+      </div>
     </div>
     <div class="admin-exercise__solution-start-content">
       <div class="solution">
@@ -188,6 +193,14 @@ export default defineComponent({
     .exercise-case-selector {
       padding: 1em;
     }
+    hr {
+      border-color: #fff;
+      margin: 1em 0;
+    }
+  }
+
+  .save-exercise-case {
+    padding: 1em;
   }
   &__solution-start-content {
     display: flex;
