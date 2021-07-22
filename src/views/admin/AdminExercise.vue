@@ -12,8 +12,22 @@
       @exerciseCaseDeleted="removeExerciseCaseOfExercise"
     />
 
-    <h3>Start content</h3>
-    <CodeEditor :defaultContent="startContent" :language="currentLanguage" />
+    <div class="start-content">
+      <h3>Start content</h3>
+      <CodeEditor
+        :defaultContent="startContent"
+        :language="currentLanguage"
+        :id="'start-content-editor'"
+      />
+    </div>
+    <div class="solution">
+      <h3>Solution</h3>
+      <CodeEditor
+        :defaultContent="solution"
+        :language="currentLanguage"
+        :id="'solution-editor'"
+      />
+    </div>
   </div>
 </template>
 
@@ -50,6 +64,7 @@ export default defineComponent({
     const { isLoading } = useLoading();
     const currentLanguage = ref("");
     const startContent = ref("");
+    const solution = ref("");
 
     onMounted(async () => {
       try {
@@ -57,6 +72,7 @@ export default defineComponent({
         currentExerciseCase.value = currentExercise.value.cases[0];
         currentLanguage.value = currentExerciseCase.value.language.languageName;
         startContent.value = currentExerciseCase.value.startContent;
+        solution.value = currentExerciseCase.value.solution;
       } catch (err: any | Response) {
         if (err.status !== undefined && err.status === 404) {
           router.push("/404");
@@ -95,6 +111,7 @@ export default defineComponent({
         currentExercise.value.cases.push(foundExerciseCase);
         currentExerciseCase.value = foundExerciseCase;
         startContent.value = foundExerciseCase.startContent;
+        solution.value = foundExerciseCase.solution;
         isLoading.value = false;
       } catch (err) {
         console.error(err);
@@ -103,6 +120,7 @@ export default defineComponent({
     const updateSelectedExerciseCase = (exerciseCase: DtoExerciseCase) => {
       currentExerciseCase.value = exerciseCase;
       startContent.value = exerciseCase.startContent;
+      solution.value = exerciseCase.solution;
     };
 
     const removeExerciseCaseOfExercise = (exerciseCaseId: number) => {
@@ -124,20 +142,11 @@ export default defineComponent({
       addExerciseCase,
       updateSelectedExerciseCase,
       removeExerciseCaseOfExercise,
+      solution,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.languages {
-  margin-left: 1em;
-  span {
-    margin-right: 0.5em;
-  }
-  img {
-    height: 3em;
-    margin: 0.5em;
-  }
-}
 </style>

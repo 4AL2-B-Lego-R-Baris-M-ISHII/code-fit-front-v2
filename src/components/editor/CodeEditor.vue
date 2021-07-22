@@ -1,5 +1,5 @@
 <template>
-  <textarea v-model="content" id="editor"></textarea>
+  <textarea v-model="content" :id="id"></textarea>
 </template>
 
 <script lang="ts">
@@ -19,6 +19,11 @@ export default defineComponent({
       default: "",
       type: String,
     },
+    id: {
+      default: "editor",
+      required: true,
+      type: String,
+    },
   },
   setup(props, ctx) {
     const content = ref("");
@@ -27,7 +32,7 @@ export default defineComponent({
     mapLanguageMode.set("JAVA8", "text/x-java");
 
     onMounted(() => {
-      const textarea = document.getElementById("editor") as HTMLTextAreaElement;
+      const textarea = document.getElementById(props.id) as HTMLTextAreaElement;
       const editor = CodeMirror.fromTextArea(textarea, {
         indentWithTabs: true,
         smartIndent: true,
