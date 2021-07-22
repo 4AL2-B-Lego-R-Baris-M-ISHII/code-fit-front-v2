@@ -67,8 +67,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .exercise-info {
   margin: 0.5em 0;
-  padding: 1em;
-  border: solid;
+  padding: 0 1em;
 
   h2 {
     margin: 0 0.5em;
