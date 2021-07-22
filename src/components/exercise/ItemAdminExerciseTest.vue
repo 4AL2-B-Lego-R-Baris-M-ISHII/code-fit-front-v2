@@ -5,6 +5,7 @@
       :defaultContent="testContent"
       :language="languageStr"
       :id="'test' + id"
+      @contentChange="updateTestContent"
     />
   </div>
 </template>
@@ -12,8 +13,8 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, onMounted, watch } from "vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
-import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
 import DtoLanguage from "@/types/language/dto-language";
+import useExerciseCase from "@/composables/useExerciseCase";
 
 export default defineComponent({
   props: {
@@ -21,9 +22,9 @@ export default defineComponent({
       required: true,
       type: Number,
     },
-    exerciseTest: {
+    index: {
       required: true,
-      type: Object as PropType<DtoExerciseTest>,
+      type: Number,
     },
     language: {
       required: true,
@@ -36,23 +37,28 @@ export default defineComponent({
   setup(props) {
     const testContent = ref("");
     const languageStr = ref("");
+    const { currentExerciseCase } = useExerciseCase();
     onMounted(() => {
-      if (props.exerciseTest) {
-        testContent.value = props.exerciseTest.content;
-      }
-      if (props.language) {
-        languageStr.value = props.language.languageName;
+      if (currentExerciseCase.value.tests !== undefined) {
+        testContent.value =
+          currentExerciseCase.value.tests[props.index].content;
+        languageStr.value = currentExerciseCase.value.language.languageName;
       }
     });
     watch(props, () => {
-      if (props.exerciseTest) {
-        testContent.value = props.exerciseTest.content;
-      }
-      if (props.language) {
-        languageStr.value = props.language.languageName;
+      if (currentExerciseCase.value.tests !== undefined) {
+        testContent.value =
+          currentExerciseCase.value.tests[props.index].content;
+        languageStr.value = currentExerciseCase.value.language.languageName;
       }
     });
-    return { testContent, languageStr };
+
+    const updateTestContent = (newContent: string) => {
+      if (currentExerciseCase.value.tests !== undefined) {
+        currentExerciseCase.value.tests[props.index].content = newContent;
+      }
+    };
+    return { testContent, languageStr, updateTestContent };
   },
 });
 </script>

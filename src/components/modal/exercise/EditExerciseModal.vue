@@ -123,6 +123,7 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   padding: 0 1em;
+  z-index: 3;
   h2 {
     text-align: center;
   }

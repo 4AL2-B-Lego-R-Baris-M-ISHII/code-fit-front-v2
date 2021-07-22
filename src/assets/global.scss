@@ -51,3 +51,11 @@ h1 {
   border: 1px solid #eee;
   height: auto;
 }
+
+.CodeMirror-gutters {
+  z-index: inherit;
+}
+
+.CodeMirror-gutter-wrapper {
+  z-index: 3;
+}

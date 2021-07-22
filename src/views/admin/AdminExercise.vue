@@ -183,7 +183,7 @@ export default defineComponent({
     display: flex;
 
     .exercise-info {
-      width: 35%;
+      width: 45%;
     }
 
     .exercise-case-selector {

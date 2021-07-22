@@ -14,7 +14,7 @@
     <div v-for="(test, index) in listExerciseTest" :key="index">
       <ItemAdminExerciseTest
         :id="index + 1"
-        :exerciseTest="test"
+        :index="index"
         :language="currentLanguage"
       />
     </div>
