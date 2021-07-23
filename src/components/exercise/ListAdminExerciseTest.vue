@@ -2,7 +2,10 @@
   <div class="list-admin-exercise-test">
     <div class="list-admin-exercise-test__top">
       <h3>Tests of exercise case</h3>
-      <button class="list-admin-exercise-test__top__create-btn">
+      <button
+        class="list-admin-exercise-test__top__create-btn"
+        title="Create exercise test"
+      >
         <font-awesome-icon
           :icon="faPlusSquare"
           size="lg"
@@ -16,6 +19,7 @@
         :id="index + 1"
         :index="index"
         :language="currentLanguage"
+        :testsLenght="listExerciseTest.length"
       />
     </div>
   </div>
