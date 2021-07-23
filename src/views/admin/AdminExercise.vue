@@ -18,9 +18,9 @@
       </div>
       <hr />
       <div class="save-exercise-case">
-        <h3>Save or validate exercise case</h3>
-        <button class="save-btn">Save</button>
-        <button class="validate-btn">Validate</button>
+        <h3>Save or verify exercise case</h3>
+        <button class="save-btn" @click="saveExerciseCase">Save</button>
+        <button class="verify-btn">Verify</button>
       </div>
     </div>
     <div class="admin-exercise__solution-start-content">
@@ -83,7 +83,8 @@ export default defineComponent({
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
-    const { currentExerciseCase, getOneExerciseCase } = useExerciseCase();
+    const { currentExerciseCase, getOneExerciseCase, updateExerciseCase } =
+      useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
     const { isLoading } = useLoading();
     const currentLanguage = ref("");
@@ -172,6 +173,17 @@ export default defineComponent({
       currentExerciseCase.value.tests.push(newTest);
     };
 
+    const saveExerciseCase = async () => {
+      try {
+        isLoading.value = true;
+        await updateExerciseCase(currentExerciseCase.value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
     return {
       currentExercise,
       updateExercise,
@@ -186,6 +198,7 @@ export default defineComponent({
       updateStartContent,
       createEmptyExerciseTest,
       solution,
+      saveExerciseCase,
     };
   },
 });
@@ -228,7 +241,7 @@ export default defineComponent({
       background: #42b8833a;
       color: black;
     }
-    .validate-btn {
+    .verify-btn {
       margin-left: 0.75em;
       padding: 0.5em 1em;
       background: inherit;
@@ -237,7 +250,7 @@ export default defineComponent({
       color: #556;
       border-radius: 10%;
     }
-    .validate-btn:hover {
+    .verify-btn:hover {
       background: #0184ff1c;
       color: black;
     }
