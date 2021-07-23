@@ -50,4 +50,13 @@ h1 {
 .CodeMirror {
   border: 1px solid #eee;
   height: auto;
+  z-index: 0;
+}
+
+.CodeMirror-gutters {
+  z-index: 0;
+}
+
+.CodeMirror-gutter-wrapper {
+  z-index: 1;
 }

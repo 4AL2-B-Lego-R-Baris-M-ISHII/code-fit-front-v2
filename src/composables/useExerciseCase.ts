@@ -2,6 +2,7 @@ import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import { ref } from "vue";
 import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import CreateExerciseCaseRequest from "@/types/exercise-case/CreateExerciseCaseRequest";
+import UpdateExerciseCaseRequest from "@/types/exercise-case/UpdateExerciseCaseRequest";
 
 const currentExerciseCase = ref<DtoExerciseCase>({} as DtoExerciseCase);
 export default function useExerciseCase() {
@@ -54,10 +55,31 @@ export default function useExerciseCase() {
     }
   }
 
+  async function updateExerciseCase(exerciseCase: DtoExerciseCase) {
+    try {
+      const body = {
+        language: exerciseCase.language,
+        solution: exerciseCase.solution,
+        startContent: exerciseCase.startContent,
+        tests: exerciseCase.tests,
+        verifyCode: false,
+      } as UpdateExerciseCaseRequest;
+      await urlHelpers.sendNoContent(
+        RequestMethod.PUT,
+        `${EXERCISE_CASE_PATH}/${exerciseCase.id}`,
+        body
+      );
+    } catch (err) {
+      const errorMessage = `Error update exercise case. Reason : ${err}`;
+      throw Error(errorMessage);
+    }
+  }
+
   return {
     currentExerciseCase,
     createExerciseCase,
     getOneExerciseCase,
     deleteExerciseCase,
+    updateExerciseCase,
   };
 }
