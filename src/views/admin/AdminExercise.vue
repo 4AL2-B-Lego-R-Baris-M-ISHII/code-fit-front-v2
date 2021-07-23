@@ -69,12 +69,13 @@ import useLoading from "@/composables/useLoading";
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
-import ListAdminCodeResult from "@/components/exercise/ListAdminCodeResult.vue";
-import ListAdminExerciseTest from "@/components/exercise/ListAdminExerciseTest.vue";
+import ListAdminCodeResult from "@/components/exercise/list-code-result/ListAdminCodeResult.vue";
+import ListAdminExerciseTest from "@/components/exercise/list-exercise-test/ListAdminExerciseTest.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
 import DtoVerifyExerciseCase from "@/types/exercise-case/dto-verify-exercise-case";
+import CodeResult from "@/types/code/code-result";
 
 export default defineComponent({
   props: {
@@ -103,7 +104,7 @@ export default defineComponent({
     const currentLanguage = ref("");
     const startContent = ref("");
     const solution = ref("");
-    const listCodeResult = ref<DtoVerifyExerciseCase[]>([]);
+    const listCodeResult = ref<CodeResult[]>([]);
 
     onMounted(async () => {
       try {
@@ -165,6 +166,7 @@ export default defineComponent({
       currentExerciseCase.value = exerciseCase;
       startContent.value = exerciseCase.startContent;
       solution.value = exerciseCase.solution;
+      listCodeResult.value = [];
     };
     const removeExerciseCaseOfExercise = (exerciseCaseId: number) => {
       const cases = currentExercise.value.cases.filter((curCase) => {
@@ -208,6 +210,7 @@ export default defineComponent({
         const result = await updateAndVerifyExerciseCase(
           currentExerciseCase.value
         );
+        listCodeResult.value = result.codeResultList;
       } catch (err) {
         console.error(err);
       } finally {

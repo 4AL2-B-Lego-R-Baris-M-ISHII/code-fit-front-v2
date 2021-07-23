@@ -33,7 +33,7 @@ import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 
-import ItemAdminExerciseTest from "@/components/exercise/ItemAdminExerciseTest.vue";
+import ItemAdminExerciseTest from "@/components/exercise/list-exercise-test/ItemAdminExerciseTest.vue";
 import DtoLanguage from "@/types/language/dto-language";
 
 export default defineComponent({

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import urlHelpers, { RequestMethod } from "@/helpers/UrlHelpers";
 import CreateExerciseCaseRequest from "@/types/exercise-case/CreateExerciseCaseRequest";
 import UpdateExerciseCaseRequest from "@/types/exercise-case/UpdateExerciseCaseRequest";
+import DtoVerifyExerciseCase from "@/types/exercise-case/dto-verify-exercise-case";
 
 const currentExerciseCase = ref<DtoExerciseCase>({} as DtoExerciseCase);
 export default function useExerciseCase() {
@@ -75,7 +76,9 @@ export default function useExerciseCase() {
     }
   }
 
-  async function updateAndVerifyExerciseCase(exerciseCase: DtoExerciseCase) {
+  async function updateAndVerifyExerciseCase(
+    exerciseCase: DtoExerciseCase
+  ): Promise<DtoVerifyExerciseCase> {
     try {
       const body = {
         language: exerciseCase.language,
@@ -84,7 +87,7 @@ export default function useExerciseCase() {
         tests: exerciseCase.tests,
         verifyCode: true,
       } as UpdateExerciseCaseRequest;
-      const result = await urlHelpers.send(
+      return await urlHelpers.send(
         RequestMethod.PUT,
         `${EXERCISE_CASE_PATH}/${exerciseCase.id}`,
         body
