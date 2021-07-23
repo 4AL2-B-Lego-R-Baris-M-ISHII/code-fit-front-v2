@@ -13,14 +13,15 @@
         />
       </button>
     </div>
-
-    <div v-for="(test, index) in orderedListTest" :key="index">
-      <ItemAdminExerciseTest
-        :id="index + 1"
-        :index="index"
-        :language="currentLanguage"
-        :testsLenght="orderedListTest.length"
-      />
+    <div class="list-container">
+      <div v-for="(test, index) in orderedListTest" :key="index">
+        <ItemAdminExerciseTest
+          :id="index + 1"
+          :index="index"
+          :language="currentLanguage"
+          :testsLenght="orderedListTest.length"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +98,11 @@ export default defineComponent({
       color: black;
       background: #42b88344;
     }
+  }
+  .list-container {
+    overflow-y: scroll;
+    scroll-behavior: auto;
+    height: 400px;
   }
 }
 </style>

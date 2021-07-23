@@ -18,7 +18,7 @@
       </div>
       <hr />
       <div class="save-exercise-case">
-        <h3>Save or verify exercise case</h3>
+        <h3>Save or verify codes and save exercise case</h3>
         <button class="save-btn" @click="saveExerciseCase">Save</button>
         <button class="verify-btn" @click="verifyExerciseCase">Verify</button>
       </div>
