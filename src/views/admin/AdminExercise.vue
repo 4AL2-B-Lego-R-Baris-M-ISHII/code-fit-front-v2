@@ -7,7 +7,7 @@
           @exercise-edited="updateExercise"
         />
       </div>
-      <div class="exercise-case-selector">
+      <div class="exercise-case-selector-and-status">
         <ExerciseCaseSelector
           :exercise="currentExercise"
           :selectedExerciseCase="currentExerciseCase"
@@ -15,6 +15,7 @@
           @selectedExerciseCaseUpdated="updateSelectedExerciseCase"
           @exerciseCaseDeleted="removeExerciseCaseOfExercise"
         />
+        <ExerciseCaseStatus :selectedExerciseCase="currentExerciseCase" />
       </div>
       <hr />
       <div class="save-exercise-case">
@@ -68,13 +69,13 @@ import useLoading from "@/composables/useLoading";
 
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
+import ExerciseCaseStatus from "@/components/exercise/ExerciseCaseStatus.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
 import ListAdminCodeResult from "@/components/exercise/list-code-result/ListAdminCodeResult.vue";
 import ListAdminExerciseTest from "@/components/exercise/list-exercise-test/ListAdminExerciseTest.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
-import DtoVerifyExerciseCase from "@/types/exercise-case/dto-verify-exercise-case";
 import CodeResult from "@/types/code/code-result";
 
 export default defineComponent({
@@ -87,6 +88,7 @@ export default defineComponent({
   components: {
     ExerciseInfo,
     ExerciseCaseSelector,
+    ExerciseCaseStatus,
     CodeEditor,
     ListAdminCodeResult,
     ListAdminExerciseTest,
@@ -211,6 +213,7 @@ export default defineComponent({
           currentExerciseCase.value
         );
         listCodeResult.value = result.codeResultList;
+        currentExerciseCase.value.isValid = result.isExerciseCaseValid;
       } catch (err) {
         console.error(err);
       } finally {
@@ -253,8 +256,12 @@ export default defineComponent({
       width: 45%;
     }
 
-    .exercise-case-selector {
+    .exercise-case-selector-and-status {
       padding: 1em;
+      .exercise-case-status {
+        margin-top: 1em;
+        margin-left: 1em;
+      }
     }
     hr {
       border-color: #fff;
@@ -267,7 +274,7 @@ export default defineComponent({
     .save-btn {
       margin-left: 0.75em;
       padding: 0.5em 1em;
-      background: inherit;
+      background: #42b88311;
       border: none;
       cursor: pointer;
       color: #556;
@@ -280,7 +287,7 @@ export default defineComponent({
     .verify-btn {
       margin-left: 0.75em;
       padding: 0.5em 1em;
-      background: inherit;
+      background: #42b88311;
       border: none;
       cursor: pointer;
       color: #556;

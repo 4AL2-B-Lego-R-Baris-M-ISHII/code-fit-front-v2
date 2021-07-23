@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="creator">
-        creator : <strong>{{ exercise.user.username }}</strong>
+        Creator : <strong>{{ exercise.user.username }}</strong>
       </div>
     </div>
     <div class="exercise__body">

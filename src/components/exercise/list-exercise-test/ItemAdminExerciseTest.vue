@@ -80,8 +80,13 @@ export default defineComponent({
       const concernedTest = currentExerciseCase.value.tests[props.index];
 
       currentExerciseCase.value.tests = currentExerciseCase.value.tests.filter(
-        (test) => test.id !== concernedTest.id
+        (test) => test.position !== concernedTest.position
       );
+      currentExerciseCase.value.tests
+        .sort((test1, test2) => test1.position - test2.position)
+        .forEach((test, index) => {
+          return (test.position = index + 1);
+        });
     };
     return { faTrash, testContent, languageStr, updateTestContent, deleteTest };
   },
