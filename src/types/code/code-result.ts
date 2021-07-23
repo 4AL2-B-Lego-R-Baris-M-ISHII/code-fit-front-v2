@@ -6,6 +6,7 @@ interface CodeResult {
   output: string;
   language: DtoLanguage;
   testId: number;
+  position: number;
 }
 
 export default CodeResult;

@@ -75,11 +75,32 @@ export default function useExerciseCase() {
     }
   }
 
+  async function updateAndVerifyExerciseCase(exerciseCase: DtoExerciseCase) {
+    try {
+      const body = {
+        language: exerciseCase.language,
+        solution: exerciseCase.solution,
+        startContent: exerciseCase.startContent,
+        tests: exerciseCase.tests,
+        verifyCode: true,
+      } as UpdateExerciseCaseRequest;
+      const result = await urlHelpers.send(
+        RequestMethod.PUT,
+        `${EXERCISE_CASE_PATH}/${exerciseCase.id}`,
+        body
+      );
+    } catch (err) {
+      const errorMessage = `Error update exercise case. Reason : ${err}`;
+      throw Error(errorMessage);
+    }
+  }
+
   return {
     currentExerciseCase,
     createExerciseCase,
     getOneExerciseCase,
     deleteExerciseCase,
     updateExerciseCase,
+    updateAndVerifyExerciseCase,
   };
 }

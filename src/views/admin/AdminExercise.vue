@@ -20,7 +20,7 @@
       <div class="save-exercise-case">
         <h3>Save or verify exercise case</h3>
         <button class="save-btn" @click="saveExerciseCase">Save</button>
-        <button class="verify-btn">Verify</button>
+        <button class="verify-btn" @click="verifyExerciseCase">Verify</button>
       </div>
     </div>
     <div class="admin-exercise__solution-start-content">
@@ -44,7 +44,10 @@
       </div>
     </div>
     <div class="admin-exercise__list-code-result-and_exercise_test">
-      <ListAdminCodeResult class="list-admin-code-result" />
+      <ListAdminCodeResult
+        class="list-admin-code-result"
+        :listCodeResult="listCodeResult"
+      />
       <ListAdminExerciseTest
         class="list-admin-exercise-test"
         :selectedExerciseCase="currentExerciseCase"
@@ -71,6 +74,7 @@ import ListAdminExerciseTest from "@/components/exercise/ListAdminExerciseTest.v
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
+import DtoVerifyExerciseCase from "@/types/exercise-case/dto-verify-exercise-case";
 
 export default defineComponent({
   props: {
@@ -88,13 +92,18 @@ export default defineComponent({
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
-    const { currentExerciseCase, getOneExerciseCase, updateExerciseCase } =
-      useExerciseCase();
+    const {
+      currentExerciseCase,
+      getOneExerciseCase,
+      updateExerciseCase,
+      updateAndVerifyExerciseCase,
+    } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
     const { isLoading } = useLoading();
     const currentLanguage = ref("");
     const startContent = ref("");
     const solution = ref("");
+    const listCodeResult = ref<DtoVerifyExerciseCase[]>([]);
 
     onMounted(async () => {
       try {
@@ -174,11 +183,11 @@ export default defineComponent({
 
     // Exercise test
     const createEmptyExerciseTest = () => {
+      const currentLenght = currentExerciseCase.value.tests.length;
       const newTest = {} as DtoExerciseTest;
       newTest.content =
-        currentExerciseCase.value.tests[
-          currentExerciseCase.value.tests.length - 1
-        ].content;
+        currentExerciseCase.value.tests[currentLenght - 1].content;
+      newTest.position = currentLenght + 1;
       currentExerciseCase.value.tests.push(newTest);
     };
 
@@ -186,6 +195,19 @@ export default defineComponent({
       try {
         isLoading.value = true;
         await updateExerciseCase(currentExerciseCase.value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    const verifyExerciseCase = async () => {
+      try {
+        isLoading.value = true;
+        const result = await updateAndVerifyExerciseCase(
+          currentExerciseCase.value
+        );
       } catch (err) {
         console.error(err);
       } finally {
@@ -208,6 +230,8 @@ export default defineComponent({
       createEmptyExerciseTest,
       solution,
       saveExerciseCase,
+      verifyExerciseCase,
+      listCodeResult,
     };
   },
 });
