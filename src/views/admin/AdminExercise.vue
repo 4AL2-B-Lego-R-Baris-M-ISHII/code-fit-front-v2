@@ -175,6 +175,10 @@ export default defineComponent({
     // Exercise test
     const createEmptyExerciseTest = () => {
       const newTest = {} as DtoExerciseTest;
+      newTest.content =
+        currentExerciseCase.value.tests[
+          currentExerciseCase.value.tests.length - 1
+        ].content;
       currentExerciseCase.value.tests.push(newTest);
     };
 
