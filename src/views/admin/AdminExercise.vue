@@ -43,11 +43,14 @@
         />
       </div>
     </div>
-
-    <ListAdminExerciseTest
-      :selectedExerciseCase="currentExerciseCase"
-      @emptyTestCreationRequest="createEmptyExerciseTest"
-    />
+    <div class="admin-exercise__list-code-result-and_exercise_test">
+      <ListAdminCodeResult class="list-admin-code-result" />
+      <ListAdminExerciseTest
+        class="list-admin-exercise-test"
+        :selectedExerciseCase="currentExerciseCase"
+        @emptyTestCreationRequest="createEmptyExerciseTest"
+      />
+    </div>
   </div>
 </template>
 
@@ -63,6 +66,7 @@ import useLoading from "@/composables/useLoading";
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
+import ListAdminCodeResult from "@/components/exercise/ListAdminCodeResult.vue";
 import ListAdminExerciseTest from "@/components/exercise/ListAdminExerciseTest.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
@@ -79,6 +83,7 @@ export default defineComponent({
     ExerciseInfo,
     ExerciseCaseSelector,
     CodeEditor,
+    ListAdminCodeResult,
     ListAdminExerciseTest,
   },
   setup(props) {
@@ -262,6 +267,16 @@ export default defineComponent({
     .start-content {
       width: 50%;
       margin: 0 1em;
+    }
+  }
+
+  &__list-code-result-and_exercise_test {
+    display: flex;
+    justify-content: space-between;
+    .list-admin-code-result,
+    .list-admin-exercise-test {
+      width: 50%;
+      margin: 1em 1em;
     }
   }
 }
