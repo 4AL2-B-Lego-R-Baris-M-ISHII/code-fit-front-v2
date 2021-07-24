@@ -11,23 +11,40 @@
         </button>
       </div>
       <div class="creator">
-        creator : <strong>{{ exercise.user.username }}</strong>
+        Creator : <strong>{{ exercise.user.username }}</strong>
       </div>
     </div>
     <div class="exercise__body">
       <div class="description">{{ exercise.description }}</div>
       <div class="languages">
-        <span
-          v-for="name in languageNames"
-          :key="name"
-          :title="languageTitle(name)"
-        >
-          <img v-if="name === 'C11'" src="@/assets/img/language-c.png" />
-          <img
-            v-else-if="name === 'JAVA8'"
-            src="@/assets/img/language-java.png"
-          />
-          <span v-else>{{ name }}</span>
+        <span v-for="exerciseCase in exercise.cases" :key="exerciseCase.id">
+          <div v-if="exerciseCase.isValid">
+            <img
+              v-if="exerciseCase.language.languageName === 'C11'"
+              src="@/assets/img/languages/valid-c.svg"
+              title="Valid C exercise case"
+            />
+            <img
+              v-else-if="exerciseCase.language.languageName === 'JAVA8'"
+              src="@/assets/img/languages/valid-java.svg"
+              title="Valid Java exercise case"
+            />
+            <span v-else>{{ exerciseCase.language.languageName }}</span>
+          </div>
+
+          <div v-else>
+            <img
+              v-if="exerciseCase.language.languageName === 'C11'"
+              src="@/assets/img/languages/invalid-c.svg"
+              title="Invalid C exercise case"
+            />
+            <img
+              v-else-if="exerciseCase.language.languageName === 'JAVA8'"
+              src="@/assets/img/languages/invalid-java.svg"
+              title="Invalid Java exercise case"
+            />
+            <span v-else>{{ exerciseCase.language.languageName }}</span>
+          </div>
         </span>
       </div>
     </div>
@@ -157,6 +174,7 @@ export default defineComponent({
       margin-right: 1em;
     }
     .languages {
+      display: flex;
       span {
         margin-right: 0.5em;
       }

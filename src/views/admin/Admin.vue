@@ -28,12 +28,12 @@ export default defineComponent({
   name: "Admin",
   components: { ListExercise, FontAwesomeIcon },
   setup() {
-    const { exercises, getAllExercises } = useExercise();
+    const { exercises, getAllCreatorExercises } = useExercise();
     const { isLoading } = useLoading();
     onMounted(async () => {
       isLoading.value = true;
       try {
-        await getAllExercises();
+        await getAllCreatorExercises();
       } finally {
         isLoading.value = false;
       }

@@ -26,6 +26,7 @@ export default function useAuth() {
       router.push("/login");
     } catch (err) {
       const status = err.status;
+      console.log(status);
       if (status !== undefined) {
         switch (status) {
           case 401:
@@ -53,6 +54,8 @@ export default function useAuth() {
         body
       );
       if (response.roles === undefined) {
+        const errorResponse = (response as unknown) as Response;
+        if (errorResponse.status === 401) throw Error("You are not signed up");
         throw Error("Problem server, try latter");
       }
       roles.value = response.roles;

@@ -7,7 +7,7 @@
           @exercise-edited="updateExercise"
         />
       </div>
-      <div class="exercise-case-selector">
+      <div class="exercise-case-selector-and-status">
         <ExerciseCaseSelector
           :exercise="currentExercise"
           :selectedExerciseCase="currentExerciseCase"
@@ -15,12 +15,13 @@
           @selectedExerciseCaseUpdated="updateSelectedExerciseCase"
           @exerciseCaseDeleted="removeExerciseCaseOfExercise"
         />
+        <ExerciseCaseStatus :selectedExerciseCase="currentExerciseCase" />
       </div>
       <hr />
       <div class="save-exercise-case">
-        <h3>Save or verify exercise case</h3>
+        <h3>Save or verify codes and save exercise case</h3>
         <button class="save-btn" @click="saveExerciseCase">Save</button>
-        <button class="verify-btn">Verify</button>
+        <button class="verify-btn" @click="verifyExerciseCase">Verify</button>
       </div>
     </div>
     <div class="admin-exercise__solution-start-content">
@@ -44,7 +45,10 @@
       </div>
     </div>
     <div class="admin-exercise__list-code-result-and_exercise_test">
-      <ListAdminCodeResult class="list-admin-code-result" />
+      <ListAdminCodeResult
+        class="list-admin-code-result"
+        :listCodeResult="listCodeResult"
+      />
       <ListAdminExerciseTest
         class="list-admin-exercise-test"
         :selectedExerciseCase="currentExerciseCase"
@@ -65,12 +69,14 @@ import useLoading from "@/composables/useLoading";
 
 import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
+import ExerciseCaseStatus from "@/components/exercise/ExerciseCaseStatus.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
-import ListAdminCodeResult from "@/components/exercise/ListAdminCodeResult.vue";
-import ListAdminExerciseTest from "@/components/exercise/ListAdminExerciseTest.vue";
+import ListAdminCodeResult from "@/components/exercise/list-code-result/ListAdminCodeResult.vue";
+import ListAdminExerciseTest from "@/components/exercise/list-exercise-test/ListAdminExerciseTest.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
+import CodeResult from "@/types/code/code-result";
 
 export default defineComponent({
   props: {
@@ -82,19 +88,25 @@ export default defineComponent({
   components: {
     ExerciseInfo,
     ExerciseCaseSelector,
+    ExerciseCaseStatus,
     CodeEditor,
     ListAdminCodeResult,
     ListAdminExerciseTest,
   },
   setup(props) {
     const { getOneExercise, currentExercise } = useExercise();
-    const { currentExerciseCase, getOneExerciseCase, updateExerciseCase } =
-      useExerciseCase();
+    const {
+      currentExerciseCase,
+      getOneExerciseCase,
+      updateExerciseCase,
+      updateAndVerifyExerciseCase,
+    } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
     const { isLoading } = useLoading();
     const currentLanguage = ref("");
     const startContent = ref("");
     const solution = ref("");
+    const listCodeResult = ref<CodeResult[]>([]);
 
     onMounted(async () => {
       try {
@@ -156,6 +168,7 @@ export default defineComponent({
       currentExerciseCase.value = exerciseCase;
       startContent.value = exerciseCase.startContent;
       solution.value = exerciseCase.solution;
+      listCodeResult.value = [];
     };
     const removeExerciseCaseOfExercise = (exerciseCaseId: number) => {
       const cases = currentExercise.value.cases.filter((curCase) => {
@@ -174,11 +187,11 @@ export default defineComponent({
 
     // Exercise test
     const createEmptyExerciseTest = () => {
+      const currentLenght = currentExerciseCase.value.tests.length;
       const newTest = {} as DtoExerciseTest;
       newTest.content =
-        currentExerciseCase.value.tests[
-          currentExerciseCase.value.tests.length - 1
-        ].content;
+        currentExerciseCase.value.tests[currentLenght - 1].content;
+      newTest.position = currentLenght + 1;
       currentExerciseCase.value.tests.push(newTest);
     };
 
@@ -186,6 +199,21 @@ export default defineComponent({
       try {
         isLoading.value = true;
         await updateExerciseCase(currentExerciseCase.value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    const verifyExerciseCase = async () => {
+      try {
+        isLoading.value = true;
+        const result = await updateAndVerifyExerciseCase(
+          currentExerciseCase.value
+        );
+        listCodeResult.value = result.codeResultList;
+        currentExerciseCase.value.isValid = result.isExerciseCaseValid;
       } catch (err) {
         console.error(err);
       } finally {
@@ -208,6 +236,8 @@ export default defineComponent({
       createEmptyExerciseTest,
       solution,
       saveExerciseCase,
+      verifyExerciseCase,
+      listCodeResult,
     };
   },
 });
@@ -226,8 +256,12 @@ export default defineComponent({
       width: 45%;
     }
 
-    .exercise-case-selector {
+    .exercise-case-selector-and-status {
       padding: 1em;
+      .exercise-case-status {
+        margin-top: 1em;
+        margin-left: 1em;
+      }
     }
     hr {
       border-color: #fff;
@@ -240,7 +274,7 @@ export default defineComponent({
     .save-btn {
       margin-left: 0.75em;
       padding: 0.5em 1em;
-      background: inherit;
+      background: #42b88311;
       border: none;
       cursor: pointer;
       color: #556;
@@ -253,7 +287,7 @@ export default defineComponent({
     .verify-btn {
       margin-left: 0.75em;
       padding: 0.5em 1em;
-      background: inherit;
+      background: #42b88311;
       border: none;
       cursor: pointer;
       color: #556;

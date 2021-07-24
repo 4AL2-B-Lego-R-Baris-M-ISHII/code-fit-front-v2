@@ -13,14 +13,15 @@
         />
       </button>
     </div>
-
-    <div v-for="(test, index) in listExerciseTest" :key="index">
-      <ItemAdminExerciseTest
-        :id="index + 1"
-        :index="index"
-        :language="currentLanguage"
-        :testsLenght="listExerciseTest.length"
-      />
+    <div class="list-container">
+      <div v-for="(test, index) in orderedListTest" :key="index">
+        <ItemAdminExerciseTest
+          :id="index + 1"
+          :index="index"
+          :language="currentLanguage"
+          :testsLenght="orderedListTest.length"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -28,12 +29,12 @@
 <script lang="ts">
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoExerciseTest from "@/types/exercise-test/dto-exercise-test";
-import { defineComponent, PropType, ref, watch } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 
-import ItemAdminExerciseTest from "@/components/exercise/ItemAdminExerciseTest.vue";
+import ItemAdminExerciseTest from "@/components/exercise/list-exercise-test/ItemAdminExerciseTest.vue";
 import DtoLanguage from "@/types/language/dto-language";
 
 export default defineComponent({
@@ -51,6 +52,13 @@ export default defineComponent({
     const listExerciseTest = ref<DtoExerciseTest[]>([]);
     const currentLanguage = ref<DtoLanguage>();
 
+    const orderedListTest = computed(() => {
+      if (listExerciseTest.value.length <= 1) return listExerciseTest.value;
+      const result = listExerciseTest.value;
+      result.sort((test1, test2) => test1.position - test2.position);
+      return result;
+    });
+
     watch(props, () => {
       if (props.selectedExerciseCase) {
         listExerciseTest.value = props.selectedExerciseCase.tests;
@@ -60,7 +68,7 @@ export default defineComponent({
 
     return {
       faPlusSquare,
-      listExerciseTest,
+      orderedListTest,
       currentLanguage,
     };
   },
@@ -90,6 +98,11 @@ export default defineComponent({
       color: black;
       background: #42b88344;
     }
+  }
+  .list-container {
+    overflow-y: scroll;
+    scroll-behavior: auto;
+    height: 400px;
   }
 }
 </style>

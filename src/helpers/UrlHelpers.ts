@@ -106,7 +106,9 @@ class UrlHelpers {
   }
 
   private async manageErrorResponse(response: Response) {
-    const errorMessage = await response.text();
+    console.log(response);
+
+    //console.log("errorMessage => " + errorMessage);
     switch (response.status) {
       case 400: {
         throw response;
@@ -118,12 +120,14 @@ class UrlHelpers {
         break;
       }
       case 404: {
+        const errorMessage = await response.text();
         const removeClasses = errorMessage.slice(
           errorMessage.indexOf(": ") + ": ".length
         );
         throw `[404] Resource not found. Reason: "${removeClasses}".`;
       }
       default: {
+        const errorMessage = await response.text();
         throw `Problem server. Reason: "${errorMessage}". If error persists, contact the administrator : codefit@gmail.com`;
       }
     }
