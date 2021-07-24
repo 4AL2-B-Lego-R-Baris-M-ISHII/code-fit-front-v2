@@ -29,7 +29,7 @@
               src="@/assets/img/languages/valid-java.svg"
               title="Valid Java exercise case"
             />
-            <span v-else>{{ name }}</span>
+            <span v-else>{{ exerciseCase.language.languageName }}</span>
           </div>
 
           <div v-else>
@@ -43,7 +43,7 @@
               src="@/assets/img/languages/invalid-java.svg"
               title="Invalid Java exercise case"
             />
-            <span v-else>{{ name }}</span>
+            <span v-else>{{ exerciseCase.language.languageName }}</span>
           </div>
         </span>
       </div>

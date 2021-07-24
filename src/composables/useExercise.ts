@@ -21,6 +21,17 @@ export default function useExercise() {
     return exercises;
   }
 
+  async function getAllCreatorExercises(): Promise<Ref<DtoExercise[]>> {
+    try {
+      const response = await urlHelpers.get(EXERCISE_PATH + "?is_creator=true");
+      exercises.value = await response.json();
+    } catch (err) {
+      throw new Error(err);
+    }
+
+    return exercises;
+  }
+
   async function createExercise(
     title: string,
     description: string,
@@ -98,6 +109,7 @@ export default function useExercise() {
     exercises,
     currentExercise,
     getAllExercises,
+    getAllCreatorExercises,
     createExercise,
     deleteExercise,
     getOneExercise,
