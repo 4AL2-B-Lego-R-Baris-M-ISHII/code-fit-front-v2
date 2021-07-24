@@ -11,7 +11,7 @@
 <script lang="ts">
 import DtoExercise from "@/types/exercise/dto-exercise";
 import { defineComponent, PropType } from "vue";
-import ItemExercise from "@/components/exercises/ItemExercise.vue";
+import ItemExercise from "@/components/exercises/ItemAdminExercise.vue";
 
 export default defineComponent({
   name: "ListExercise",
