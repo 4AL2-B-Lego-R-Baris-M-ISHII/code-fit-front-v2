@@ -19,8 +19,7 @@
       </div>
       <hr />
       <div class="save-exercise-case">
-        <h3>Save or verify codes and save exercise case</h3>
-        <button class="save-btn" @click="saveExerciseCase">Save</button>
+        <h3>Verify and save exercise case</h3>
         <button class="verify-btn" @click="verifyExerciseCase">Verify</button>
       </div>
     </div>
@@ -195,17 +194,6 @@ export default defineComponent({
       currentExerciseCase.value.tests.push(newTest);
     };
 
-    const saveExerciseCase = async () => {
-      try {
-        isLoading.value = true;
-        await updateExerciseCase(currentExerciseCase.value);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        isLoading.value = false;
-      }
-    };
-
     const verifyExerciseCase = async () => {
       try {
         isLoading.value = true;
@@ -235,7 +223,6 @@ export default defineComponent({
       updateStartContent,
       createEmptyExerciseTest,
       solution,
-      saveExerciseCase,
       verifyExerciseCase,
       listCodeResult,
     };
