@@ -1,6 +1,7 @@
 <template>
   <div class="home container">
     <h1>List exercises</h1>
+    <ListExercise :exercises="exercises" :isAdminPage="false" />
   </div>
 </template>
 
@@ -8,15 +9,21 @@
 import useExercise from "@/composables/useExercise";
 import { defineComponent, onMounted } from "vue";
 
+import ListExercise from "@/components/exercises/ListExercise.vue";
+import useLoading from "@/composables/useLoading";
+
 export default defineComponent({
   name: "Home",
-  components: {},
+  components: { ListExercise },
   setup() {
-    const { getAllExercisesWithLoggedUserCode, exercises } = useExercise();
+    const { getAllExercisesWithLoggedUserCodeAndValidCases, exercises } =
+      useExercise();
+    const { isLoading } = useLoading();
 
     onMounted(async () => {
-      await getAllExercisesWithLoggedUserCode();
-      console.log(exercises.value);
+      isLoading.value = true;
+      await getAllExercisesWithLoggedUserCodeAndValidCases();
+      isLoading.value = false;
     });
     return { exercises };
   },
