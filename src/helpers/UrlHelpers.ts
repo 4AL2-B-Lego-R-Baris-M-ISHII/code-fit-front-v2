@@ -19,11 +19,18 @@ class UrlHelpers {
         Authorization: `Bearer ${jwtTokenUtils.getToken()}`,
       },
     };
-    const response = await fetch(this.url + path, requestInfo);
-    if (!response.ok) {
-      await this.manageErrorResponse(response);
+    try {
+      const response = await fetch(this.url + path, requestInfo);
+      if (!response.ok) {
+        console.log("not ok");
+        await this.manageErrorResponse(response);
+        console.log("after not ok");
+      }
+      return response;
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
-    return response;
   }
 
   async post<Req>(path: string, body: Req): Promise<number> {
