@@ -1,5 +1,5 @@
 <template>
-  <div class="item-user-exercise" @click="openModal">
+  <div class="item-user-exercise" @click="redirectToExercise">
     <div class="item-user-exercise__header">
       <div class="item-user-exercise__header__title-and-validation">
         <h3>{{ exercise.title }}</h3>
@@ -31,16 +31,26 @@
       </div>
     </div>
   </div>
+  <SelectExerciseCaseModal
+    :exercise="exercise"
+    :showModal="showSelectExerciseCaseModal"
+    @closed="closedSelectExerciseCaseModal"
+  />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import DtoExercise from "@/types/exercise/dto-exercise";
-import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import DtoCode from "@/types/code/dto-code";
+import router from "@/router";
+
+import SelectExerciseCaseModal from "@/components/modal/user-exercise/SelectExerciseCaseModal.vue";
 
 export default defineComponent({
+  components: {
+    SelectExerciseCaseModal,
+  },
   props: {
     exercise: {
       required: true,
@@ -48,6 +58,8 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const showSelectExerciseCaseModal = ref(false);
+
     const checkExerciseOneResolveCase = computed(() => {
       return props.exercise.cases.some((curCase: any) => {
         return (
@@ -57,11 +69,31 @@ export default defineComponent({
       });
     });
 
-    const openModal = () => {
-      console.log("open modal");
+    const closedSelectExerciseCaseModal = () => {
+      showSelectExerciseCaseModal.value = false;
     };
 
-    return { faCheck, checkExerciseOneResolveCase, openModal };
+    const redirectToExercise = () => {
+      if (props.exercise.cases.length == 1) {
+        router.push({
+          name: "UserExercise",
+          params: {
+            exerciseId: props.exercise.id,
+            exerciseCaseId: props.exercise.cases[0].id,
+          },
+        });
+        return;
+      }
+      showSelectExerciseCaseModal.value = true;
+    };
+
+    return {
+      faCheck,
+      checkExerciseOneResolveCase,
+      redirectToExercise,
+      showSelectExerciseCaseModal,
+      closedSelectExerciseCaseModal,
+    };
   },
 });
 </script>
@@ -93,6 +125,12 @@ export default defineComponent({
     margin: 1em;
     display: flex;
     justify-content: space-between;
+
+    .languages {
+      span {
+        margin: 0 1em;
+      }
+    }
   }
 }
 </style>

@@ -97,7 +97,6 @@ export default defineComponent({
     const {
       currentExerciseCase,
       getOneExerciseCase,
-      updateExerciseCase,
       updateAndVerifyExerciseCase,
     } = useExerciseCase();
     const { showErrorModal, messageError } = useErrorModal();
