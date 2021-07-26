@@ -15,7 +15,9 @@
             </select>
           </div>
           <div class="buttons-section">
-            <button class="buttons-section__select-btn">Select</button>
+            <button class="buttons-section__select-btn" @click="handleSubmit">
+              Select
+            </button>
             <button
               class="buttons-section__cancel-btn"
               @click="$emit('closed')"
@@ -31,6 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from "vue";
+import router from "@/router";
 
 import Modal from "@/components/modal/Modal.vue";
 import DtoExercise from "@/types/exercise/dto-exercise";
@@ -51,14 +54,32 @@ export default defineComponent({
       type: Object as PropType<DtoExercise>,
     },
   },
-  setup(props) {
+  setup(props, ctx) {
     const selectedLanguage = ref<string>("");
     const exerciseCases = ref<DtoExerciseCase[]>([]);
     watch(props, () => {
       exerciseCases.value = props.exercise.cases;
       selectedLanguage.value = exerciseCases.value[0].language.languageName;
     });
-    return { selectedLanguage, exerciseCases };
+
+    const handleSubmit = () => {
+      const selectedExerciseCase = props.exercise.cases.find(
+        (curCase) => curCase.language.languageName === selectedLanguage.value
+      );
+      if (selectedExerciseCase === undefined) {
+        console.error("Problem selection empty language");
+        return;
+      }
+      router.push({
+        name: "UserExercise",
+        params: {
+          exerciseId: props.exercise.id,
+          exerciseCaseId: selectedExerciseCase.id,
+        },
+      });
+      ctx.emit("closed");
+    };
+    return { selectedLanguage, exerciseCases, handleSubmit };
   },
 });
 </script>

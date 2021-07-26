@@ -15,8 +15,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    console.log(props.exerciseId);
-    console.log(props.exerciseCaseId);
+    // console.log(props.exerciseId);
+    // console.log(props.exerciseCaseId);
     return {};
   },
 });
