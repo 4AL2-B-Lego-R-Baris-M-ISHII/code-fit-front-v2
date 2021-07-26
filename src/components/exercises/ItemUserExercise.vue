@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="item-user-exercise__body">
-      <div>{{ exercise.description }}</div>
+      <div>{{ truncatDescription }}</div>
       <div class="languages">
         <span v-for="exerciseCase in exercise.cases" :key="exerciseCase.id">
           <img
@@ -58,6 +58,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const DESCRIPTION_LENGHT_LIMIT = 70;
     const showSelectExerciseCaseModal = ref(false);
 
     const checkExerciseOneResolveCase = computed(() => {
@@ -68,7 +69,15 @@ export default defineComponent({
         );
       });
     });
-
+    const truncatDescription = computed(() => {
+      if (props.exercise.description.length <= DESCRIPTION_LENGHT_LIMIT) {
+        return props.exercise.description;
+      }
+      return (
+        props.exercise.description.substring(0, DESCRIPTION_LENGHT_LIMIT) +
+        "..."
+      );
+    });
     const closedSelectExerciseCaseModal = () => {
       showSelectExerciseCaseModal.value = false;
     };
@@ -93,6 +102,7 @@ export default defineComponent({
       redirectToExercise,
       showSelectExerciseCaseModal,
       closedSelectExerciseCaseModal,
+      truncatDescription,
     };
   },
 });

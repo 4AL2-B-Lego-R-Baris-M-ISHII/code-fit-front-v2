@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="exercise__body">
-      <div class="description">{{ exercise.description }}</div>
+      <div class="description">{{ truncatDescription }}</div>
       <div class="languages">
         <span v-for="exerciseCase in exercise.cases" :key="exerciseCase.id">
           <div v-if="exerciseCase.isValid">
@@ -80,6 +80,17 @@ export default defineComponent({
   },
   setup(props) {
     const { deleteExercise } = useExercise();
+    const DESCRIPTION_LENGHT_LIMIT = 70;
+
+    const truncatDescription = computed(() => {
+      if (props.exercise.description.length <= DESCRIPTION_LENGHT_LIMIT) {
+        return props.exercise.description;
+      }
+      return (
+        props.exercise.description.substring(0, DESCRIPTION_LENGHT_LIMIT) +
+        "..."
+      );
+    });
 
     const languageNames = computed(() => {
       return props.exercise.cases.map((curCase) => {
@@ -129,6 +140,7 @@ export default defineComponent({
       showModal,
       closeModal,
       deleteExerciseHandle,
+      truncatDescription,
     };
   },
 });

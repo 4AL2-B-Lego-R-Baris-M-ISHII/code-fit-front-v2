@@ -1,14 +1,25 @@
-<template>User exercise</template>
+<template>
+  <UserExerciseInfo
+    :title="currentExercise.title"
+    :description="currentExercise.description"
+  />
+</template>
 
 <script lang="ts">
-import useExercise from "@/composables/useExercise";
 import { defineComponent, onMounted } from "vue";
 import router from "@/router";
+
+import UserExerciseInfo from "@/components/exercise/user-exercise/UserExerciseInfo.vue";
+
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
+import useExercise from "@/composables/useExercise";
 import useExerciseCase from "@/composables/useExerciseCase";
 import useErrorModal from "@/composables/useErrorModal";
 
 export default defineComponent({
+  components: {
+    UserExerciseInfo,
+  },
   props: {
     exerciseId: {
       required: true,
@@ -51,6 +62,7 @@ export default defineComponent({
           router.push("/404");
           return;
         }
+        currentExerciseCase.value = foundExerciseCase;
       } catch (err) {
         if (typeof err === "string") {
           if (err.startsWith("[404]")) {
@@ -63,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    return {};
+    return { currentExercise, currentExerciseCase };
   },
 });
 </script>

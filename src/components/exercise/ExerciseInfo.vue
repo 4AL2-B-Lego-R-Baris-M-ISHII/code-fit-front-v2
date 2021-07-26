@@ -13,7 +13,7 @@
     </div>
     <div class="exercise-info__group">
       <div>Description:</div>
-      <div>{{ exercise.description }}</div>
+      <div v-html="curDescriptionWithLineBreakHtml"></div>
     </div>
   </section>
   <EditExerciseModal
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType, ref, computed } from "vue";
 import DtoExercise from "@/types/exercise/dto-exercise";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -54,11 +54,18 @@ export default defineComponent({
       ctx.emit("exercise-edited", title, description);
     };
 
+    const curDescriptionWithLineBreakHtml = computed(() => {
+      const curDescription = props.exercise.description;
+      if (curDescription === undefined) return "";
+      return curDescription.replace(/\r?\n/g, "<br />");
+    });
+
     return {
       toggleEditExerciseModal,
       faEdit,
       showEditExerciseModal,
       updateEditExercise,
+      curDescriptionWithLineBreakHtml,
     };
   },
 });
