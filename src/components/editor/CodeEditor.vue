@@ -7,7 +7,7 @@ import CodeMirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/eclipse.css";
 import "codemirror/mode/clike/clike.js";
-import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
   props: {
