@@ -22,8 +22,13 @@ export default defineComponent({
 
     onMounted(async () => {
       isLoading.value = true;
-      await getAllExercisesWithLoggedUserCodeAndValidCases();
-      isLoading.value = false;
+      try {
+        await getAllExercisesWithLoggedUserCodeAndValidCases();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isLoading.value = false;
+      }
     });
     return { exercises };
   },

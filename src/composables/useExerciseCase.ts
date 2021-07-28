@@ -26,12 +26,15 @@ export default function useExerciseCase() {
   }
 
   async function getOneExerciseCase(
-    exerciseCaseId: number
+    exerciseCaseId: number,
+    withCode = false
   ): Promise<DtoExerciseCase> {
     try {
-      const response = await urlHelpers.get(
-        `${EXERCISE_CASE_PATH}/${exerciseCaseId}`
-      );
+      let currentExerciseCasePath = `${EXERCISE_CASE_PATH}/${exerciseCaseId}`;
+      if (withCode) {
+        currentExerciseCasePath = currentExerciseCasePath + "?not_admin=true";
+      }
+      const response = await urlHelpers.get(currentExerciseCasePath);
       if (response.ok) {
         return await response.json();
       }

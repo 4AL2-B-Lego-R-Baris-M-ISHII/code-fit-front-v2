@@ -44,9 +44,10 @@
       </div>
     </div>
     <div class="admin-exercise__list-code-result-and_exercise_test">
-      <ListAdminCodeResult
+      <ListCodeResult
         class="list-admin-code-result"
         :listCodeResult="listCodeResult"
+        :messageWhenNoCodeResult="'Not output, click on \'Verify\' to get output of exercise case'"
       />
       <ListAdminExerciseTest
         class="list-admin-exercise-test"
@@ -70,7 +71,7 @@ import ExerciseInfo from "@/components/exercise/ExerciseInfo.vue";
 import ExerciseCaseSelector from "@/components/exercise/ExerciseCaseSelector.vue";
 import ExerciseCaseStatus from "@/components/exercise/ExerciseCaseStatus.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
-import ListAdminCodeResult from "@/components/exercise/list-code-result/ListAdminCodeResult.vue";
+import ListCodeResult from "@/components/exercise/list-code-result/ListCodeResult.vue";
 import ListAdminExerciseTest from "@/components/exercise/list-exercise-test/ListAdminExerciseTest.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
@@ -89,7 +90,7 @@ export default defineComponent({
     ExerciseCaseSelector,
     ExerciseCaseStatus,
     CodeEditor,
-    ListAdminCodeResult,
+    ListCodeResult,
     ListAdminExerciseTest,
   },
   setup(props) {

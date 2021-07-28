@@ -26,7 +26,6 @@ export default function useAuth() {
       router.push("/login");
     } catch (err) {
       const status = err.status;
-      console.log(status);
       if (status !== undefined) {
         switch (status) {
           case 401:
