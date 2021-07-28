@@ -1,0 +1,62 @@
+html,
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+}
+
+h1 {
+  letter-spacing: 4px;
+}
+
+.container {
+  padding: 0 15%;
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 1em 2em;
+  label {
+    font-size: 1.5em;
+  }
+  input {
+    width: 70%;
+    font-size: 1em;
+  }
+
+  .space {
+    width: 75%;
+  }
+  button {
+    font-size: inherit;
+    min-width: 100px;
+    min-height: 50px;
+    background: inherit;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #ddd;
+    font-weight: bold;
+  }
+}
+
+.error-message {
+  color: red;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+  z-index: 0;
+}
+
+.CodeMirror-gutters {
+  z-index: 0;
+}
+
+.CodeMirror-gutter-wrapper {
+  z-index: 1;
+}
