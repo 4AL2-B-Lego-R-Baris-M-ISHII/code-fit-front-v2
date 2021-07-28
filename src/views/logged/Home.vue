@@ -1,6 +1,6 @@
 <template>
   <div class="home container">
-    <h1>List exercises</h1>
+    <h1>Code exercises</h1>
     <ListExercise :exercises="exercises" :isAdminPage="false" />
   </div>
 </template>

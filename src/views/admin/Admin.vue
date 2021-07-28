@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="exercise-title">
-      <h1>Exercises</h1>
+      <h1>Your exercises</h1>
       <div class="exercise-title__create-btn">
         <router-link :to="{ name: 'CreateExercise' }"
           ><font-awesome-icon
