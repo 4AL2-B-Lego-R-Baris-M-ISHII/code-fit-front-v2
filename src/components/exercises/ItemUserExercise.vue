@@ -58,7 +58,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const DESCRIPTION_LENGHT_LIMIT = 70;
+    const DESCRIPTION_LENGHT_LIMIT = 100;
     const showSelectExerciseCaseModal = ref(false);
 
     const checkExerciseOneResolveCase = computed(() => {

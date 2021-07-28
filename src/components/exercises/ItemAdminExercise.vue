@@ -80,7 +80,7 @@ export default defineComponent({
   },
   setup(props) {
     const { deleteExercise } = useExercise();
-    const DESCRIPTION_LENGHT_LIMIT = 70;
+    const DESCRIPTION_LENGHT_LIMIT = 100;
 
     const truncatDescription = computed(() => {
       if (props.exercise.description.length <= DESCRIPTION_LENGHT_LIMIT) {
