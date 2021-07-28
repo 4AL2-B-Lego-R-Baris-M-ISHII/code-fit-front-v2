@@ -20,6 +20,7 @@
         :messageWhenNoCodeResult="'Not output, click on \'Submit\' to get output of exercise'"
       />
     </div>
+    <SuccessExerciseModal :showModal="showSuccessModal" @closed="closedModal" />
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import router from "@/router";
 import UserExerciseInfo from "@/components/exercise/user-exercise/UserExerciseInfo.vue";
 import CodeEditor from "@/components/editor/CodeEditor.vue";
 import ListCodeResult from "@/components/exercise/list-code-result/ListCodeResult.vue";
+import SuccessExerciseModal from "@/components/modal/user-exercise/SuccessExerciseModal.vue";
 
 import DtoExerciseCase from "@/types/exercise-case/dto-exercise-case";
 import useExercise from "@/composables/useExercise";
@@ -44,6 +46,7 @@ export default defineComponent({
     UserExerciseInfo,
     CodeEditor,
     ListCodeResult,
+    SuccessExerciseModal,
   },
   props: {
     exerciseId: {
@@ -67,6 +70,7 @@ export default defineComponent({
 
     const listCodeResult = ref<CodeResult[]>([]);
     const isResolved = ref(false);
+    const showSuccessModal = ref(false);
 
     onMounted(async () => {
       const exerciseId = parseInt(props.exerciseId);
@@ -136,7 +140,12 @@ export default defineComponent({
           codeContent.value,
           currentExerciseCase.value.id
         );
+        const currentCodeIsResolved = result?.isResolved ?? false;
+        isResolved.value = currentCodeIsResolved;
         listCodeResult.value = result?.listCodeResult ?? [];
+        if (currentCodeIsResolved) {
+          showSuccessModal.value = true;
+        }
       } catch (err) {
         openErrorModal(`Cause : ${err}`);
       } finally {
@@ -144,6 +153,9 @@ export default defineComponent({
       }
     };
 
+    const closedModal = () => {
+      showSuccessModal.value = false;
+    };
     return {
       currentExercise,
       currentExerciseCase,
@@ -152,6 +164,8 @@ export default defineComponent({
       verifyCodeExercise,
       listCodeResult,
       isResolved,
+      showSuccessModal,
+      closedModal,
     };
   },
 });
