@@ -13,8 +13,7 @@
         />
       </div>
       <div v-if="listCodeResult.length === 0">
-        Not output, click on <strong>Verify</strong> to get output of exercise
-        case
+        {{ messageWhenNoCodeResult }}
       </div>
     </div>
   </div>
@@ -24,7 +23,7 @@
 import CodeResult from "@/types/code/code-result";
 import { computed, defineComponent, PropType } from "vue";
 
-import ItemAdminCodeResult from "@/components/exercise/list-code-result/ItemAdminCodeResult.vue";
+import ItemAdminCodeResult from "@/components/exercise/list-code-result/ItemCodeResult.vue";
 
 export default defineComponent({
   components: {
@@ -34,6 +33,10 @@ export default defineComponent({
     listCodeResult: {
       default: [] as PropType<CodeResult[]>,
       type: Object as PropType<CodeResult[]>,
+    },
+    messageWhenNoCodeResult: {
+      default: "No output",
+      type: String,
     },
   },
   setup(props) {

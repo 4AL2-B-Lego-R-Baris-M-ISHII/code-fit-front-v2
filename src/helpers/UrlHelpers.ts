@@ -22,9 +22,7 @@ class UrlHelpers {
     try {
       const response = await fetch(this.url + path, requestInfo);
       if (!response.ok) {
-        console.log("not ok");
         await this.manageErrorResponse(response);
-        console.log("after not ok");
       }
       return response;
     } catch (err) {
@@ -113,9 +111,6 @@ class UrlHelpers {
   }
 
   private async manageErrorResponse(response: Response) {
-    console.log(response);
-
-    //console.log("errorMessage => " + errorMessage);
     switch (response.status) {
       case 400: {
         throw response;

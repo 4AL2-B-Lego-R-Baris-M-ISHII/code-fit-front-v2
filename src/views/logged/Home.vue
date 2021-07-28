@@ -1,6 +1,6 @@
 <template>
   <div class="home container">
-    <h1>List exercises</h1>
+    <h1>Code exercises</h1>
     <ListExercise :exercises="exercises" :isAdminPage="false" />
   </div>
 </template>
@@ -22,8 +22,13 @@ export default defineComponent({
 
     onMounted(async () => {
       isLoading.value = true;
-      await getAllExercisesWithLoggedUserCodeAndValidCases();
-      isLoading.value = false;
+      try {
+        await getAllExercisesWithLoggedUserCodeAndValidCases();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isLoading.value = false;
+      }
     });
     return { exercises };
   },
