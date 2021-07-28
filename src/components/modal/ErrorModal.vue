@@ -2,11 +2,11 @@
   <teleport to="#modals" v-if="showErrorModal">
     <Modal @closed="closeModal">
       <h2>
-        <font-awesome-icon :icon="faTimesCircle" size="lg" /><span
-          >Problem request</span
-        >
+        <font-awesome-icon :icon="faTimesCircle" size="lg" /><span>{{
+          title
+        }}</span>
       </h2>
-      <div>{{ messageError }}</div>
+      <div class="message-error">{{ messageError }}</div>
       <template v-slot:links>
         <button class="close-btn" @click="closeModal">Close</button>
       </template>
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import useErrorModal from "@/composables/useErrorModal";
 import Modal from "@/components/modal/Modal.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -27,12 +27,18 @@ export default defineComponent({
     FontAwesomeIcon,
   },
   setup() {
-    const { showErrorModal, messageError } = useErrorModal();
+    const { showErrorModal, messageError, title } = useErrorModal();
     const closeModal = () => {
       showErrorModal.value = false;
       messageError.value = "";
     };
-    return { showErrorModal, messageError, closeModal, faTimesCircle };
+
+    onMounted(() => {
+      if (title.value === "") {
+        title.value = "Problem request";
+      }
+    });
+    return { showErrorModal, messageError, closeModal, faTimesCircle, title };
   },
 });
 </script>
@@ -45,6 +51,9 @@ h2 {
   span {
     margin-left: 0.5em;
   }
+}
+.message-error {
+  padding: 0 1em 1em;
 }
 .close-btn {
   padding: 0.5em 1em;

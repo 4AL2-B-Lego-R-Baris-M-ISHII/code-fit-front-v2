@@ -7,6 +7,7 @@ import AdminExercise from "../views/admin/AdminExercise.vue";
 import NotFound from "../views/NotFound.vue";
 import Forbidden from "../views/Forbidden.vue";
 import CreateExercise from "../views/admin/CreateExercise.vue";
+import UserExercise from "../views/logged/UserExercise.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,6 +39,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/exercise/:exerciseId",
     name: "AdminExercise",
     component: AdminExercise,
+    props: true,
+  },
+  {
+    path: "/exercise/:exerciseId/exercise-case/:exerciseCaseId",
+    name: "UserExercise",
+    component: UserExercise,
     props: true,
   },
   {

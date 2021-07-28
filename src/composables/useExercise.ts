@@ -32,6 +32,21 @@ export default function useExercise() {
     return exercises;
   }
 
+  async function getAllExercisesWithLoggedUserCodeAndValidCases(): Promise<
+    Ref<DtoExercise[]>
+  > {
+    try {
+      const response = await urlHelpers.get(
+        EXERCISE_PATH + "?with_logged_user_code=true&is_valid=true"
+      );
+      exercises.value = await response.json();
+    } catch (err) {
+      throw new Error(err);
+    }
+
+    return exercises;
+  }
+
   async function createExercise(
     title: string,
     description: string,
@@ -110,6 +125,7 @@ export default function useExercise() {
     currentExercise,
     getAllExercises,
     getAllCreatorExercises,
+    getAllExercisesWithLoggedUserCodeAndValidCases,
     createExercise,
     deleteExercise,
     getOneExercise,
