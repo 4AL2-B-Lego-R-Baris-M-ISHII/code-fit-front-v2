@@ -3,6 +3,7 @@
     <UserExerciseInfo
       :title="currentExercise.title"
       :description="currentExercise.description"
+      :isResolved="isResolved"
     />
     <hr />
     <div class="user-code-editor">
@@ -65,6 +66,7 @@ export default defineComponent({
     const codeContent = ref("");
 
     const listCodeResult = ref<CodeResult[]>([]);
+    const isResolved = ref(false);
 
     onMounted(async () => {
       const exerciseId = parseInt(props.exerciseId);
@@ -98,6 +100,8 @@ export default defineComponent({
 
         defaultCodeContent.value =
           getDefaultCodeContentDependToFoundExerciseCase(foundExerciseCase);
+
+        isResolved.value = foundExerciseCase.codes?.[0].isResolved ?? false;
 
         isLoading.value = false;
       } catch (err) {
@@ -147,6 +151,7 @@ export default defineComponent({
       updateCodeContent,
       verifyCodeExercise,
       listCodeResult,
+      isResolved,
     };
   },
 });
